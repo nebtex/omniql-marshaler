@@ -1,6 +1,6 @@
-package marshaller
+package omarshaller
 
-//go:generate easyjson -all errors.go
+import "fmt"
 
 //DecodeError contains the data to fully identify  an error produced by the decoder
 type DecodeError struct {
@@ -15,6 +15,5 @@ type DecodeError struct {
 }
 
 func (d *DecodeError) Error() string {
-	json, _ := d.MarshalJSON()
-	return string(json)
+	return fmt.Sprintf("#Application: %s, #Path: %s, #HybridType: %s, #OmniqlType: %s, #OmniqlItems:[%s], Error: %s", d.Application, d.Path, d.HybridType, d.OmniqlType, d.OmniqlItems, d.ErrorMsg)
 }

@@ -1,4 +1,4 @@
-package marshaller
+package omarshaller
 
 import (
 	"github.com/nebtex/hybrids/golang/hybrids"

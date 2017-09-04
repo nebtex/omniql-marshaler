@@ -47,6 +47,11 @@ func (d *Decoder) decodeScalar(path string, number float64, tw hybrids.TableWrit
 
 func (d *Decoder) getFloat64(number interface{}) (value float64, err error) {
 	var ok bool
+
+	if number == nil {
+		err = fmt.Errorf("Number (float64) expected, got null/nil")
+		return
+	}
 	value, ok = number.(float64)
 
 	if !ok {
@@ -92,6 +97,11 @@ func (d *Decoder) getInt64(number interface{}) (value int64, err error) {
 	var ok bool
 	var sv string
 	var fv float64
+
+	if number == nil {
+		err = fmt.Errorf("Number (float64 or string) expected, got nil/null")
+		return
+	}
 
 	value, ok = number.(int64)
 
@@ -155,11 +165,15 @@ func (d *Decoder) decodeInt64(path string, number interface{}, fn hybrids.FieldN
 	return
 }
 
-
 func (d *Decoder) getUint64(number interface{}) (value uint64, err error) {
 	var ok bool
 	var sv string
 	var fv float64
+
+	if number == nil {
+		err = fmt.Errorf("Number (float64 or string) expected, got nil/null")
+		return
+	}
 
 	value, ok = number.(uint64)
 
@@ -191,7 +205,6 @@ func (d *Decoder) getUint64(number interface{}) (value uint64, err error) {
 	return
 }
 
-
 func (d *Decoder) decodeUint64(path string, number interface{}, fn hybrids.FieldNumber, tw hybrids.Uint64WriterAccessor) (err error) {
 	var v uint64
 
@@ -221,5 +234,122 @@ func (d *Decoder) decodeUint64(path string, number interface{}, fn hybrids.Field
 		return
 	}
 
+	return
+}
+
+func (d *Decoder) getBoolean(number interface{}) (value bool, err error) {
+	var ok bool
+
+	if number == nil {
+		err = fmt.Errorf("Boolean expected, got nil/null")
+		return
+	}
+	value, ok = number.(bool)
+
+	if !ok {
+		err = fmt.Errorf("Boolean expected, got %s", reflect.ValueOf(number).Type().String())
+		return
+	}
+
+	return
+}
+
+func (d *Decoder) decodeBoolean(path string, number interface{}, fn hybrids.FieldNumber, tw hybrids.BooleanWriterAccessor) (err error) {
+	var v bool
+
+	v, err = d.getBoolean(number)
+
+	if err != nil {
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			HybridType:  "Boolean",
+			OmniqlType:  "Boolean",
+			ErrorMsg:    err.Error(),
+		}
+		return
+	}
+
+	err = tw.SetBoolean(fn, v)
+
+	if err != nil {
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			HybridType:  "Boolean",
+			OmniqlType:  "Boolean",
+			ErrorMsg:    err.Error(),
+		}
+		return
+	}
+
+	return
+}
+
+func (d *Decoder) decodeVectorBoolean(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.VectorBooleanWriterAccessor) (err error) {
+	var vector hybrids.VectorBooleanWriter
+	var item bool
+	var vi []interface{}
+	var ok bool
+
+	if value != nil {
+		vi, ok = value.([]interface{})
+
+		if !ok {
+			err = &DecodeError{
+				Path:        path,
+				Application: d.application,
+				HybridType:  "VectorBoolean",
+				OmniqlType:  "Vector",
+				OmniqlItems: "Boolean",
+				ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
+			}
+			return
+		}
+	}
+
+	vector, err = tw.UpsertVectorBoolean(fn)
+
+	if err != nil {
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			HybridType:  "VectorBoolean",
+			OmniqlType:  "Vector",
+			OmniqlItems: "Boolean",
+			ErrorMsg:    err.Error(),
+		}
+		return
+	}
+	if value == nil {
+		return
+	}
+
+	for index, v := range vi {
+		item, err = d.getBoolean(v)
+		if err != nil {
+			err = &DecodeError{
+				Path:        fmt.Sprintf("%s[%d]", path, index),
+				Application: d.application,
+				HybridType:  "VectorBoolean",
+				OmniqlType:  "Vector",
+				OmniqlItems: "Boolean",
+				ErrorMsg:    err.Error(),
+			}
+			return
+		}
+		err = vector.PushBoolean(item)
+		if err != nil {
+			err = &DecodeError{
+				Path:        fmt.Sprintf("%s[%d]", path, index),
+				Application: d.application,
+				HybridType:  "VectorBoolean",
+				OmniqlType:  "Vector",
+				OmniqlItems: "Boolean",
+				ErrorMsg:    err.Error(),
+			}
+			return
+		}
+	}
 	return
 }

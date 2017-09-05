@@ -230,7 +230,7 @@ func Test_Decode_VectorBoolean(t *testing.T) {
 			vector                  interface{}
 			mockVector              []bool
 			shouldFail              bool
-			makeUpsertVectorFail    bool
+			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
@@ -261,9 +261,9 @@ func Test_Decode_VectorBoolean(t *testing.T) {
 
 				vectorBooleanMock := &mocks.VectorBooleanWriterAccessor{}
 
-				call := vectorBooleanMock.On("UpsertVectorBoolean", ti.fn)
-				if ti.makeUpsertVectorFail {
-					call.Return(nil, fmt.Errorf("UpsertVectorBoolean failed"))
+				call := vectorBooleanMock.On("SetVectorBoolean", ti.fn)
+				if ti.makeSetVectorFail {
+					call.Return(nil, fmt.Errorf("SetVectorBoolean failed"))
 				} else {
 					call.Return(boolMock, nil)
 				}
@@ -276,13 +276,12 @@ func Test_Decode_VectorBoolean(t *testing.T) {
 					So(de.Application, ShouldEqual, "test")
 					So(de.HybridType, ShouldEqual, "VectorBoolean")
 					So(de.OmniqlType, ShouldEqual, "Vector")
-					So(de.OmniqlItems, ShouldEqual, "Boolean")
 
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeUpsertVectorFail {
-							vectorBooleanMock.AssertCalled(t, "UpsertVectorBoolean", ti.fn)
+						if !ti.makeSetVectorFail {
+							vectorBooleanMock.AssertCalled(t, "SetVectorBoolean", ti.fn)
 						}
 
 						if !ti.makePushFail {

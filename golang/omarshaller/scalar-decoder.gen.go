@@ -47,7 +47,7 @@ func (d *Decoder) decodeInt8(path string, number interface{}, fn hybrids.FieldNu
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "Int8",
+          HybridType:  hybrids.Int8,
           OmniqlType:  "Int8",
           ErrorMsg:    err.Error(),
           }
@@ -60,7 +60,7 @@ func (d *Decoder) decodeInt8(path string, number interface{}, fn hybrids.FieldNu
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "Int8",
+          HybridType:  hybrids.Int8,
           OmniqlType:  "Int8",
           ErrorMsg:    err.Error(),
        }
@@ -109,7 +109,7 @@ func (d *Decoder) decodeUint8(path string, number interface{}, fn hybrids.FieldN
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "Uint8",
+          HybridType:  hybrids.Uint8,
           OmniqlType:  "Uint8",
           ErrorMsg:    err.Error(),
           }
@@ -122,7 +122,7 @@ func (d *Decoder) decodeUint8(path string, number interface{}, fn hybrids.FieldN
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "Uint8",
+          HybridType:  hybrids.Uint8,
           OmniqlType:  "Uint8",
           ErrorMsg:    err.Error(),
        }
@@ -171,7 +171,7 @@ func (d *Decoder) decodeInt16(path string, number interface{}, fn hybrids.FieldN
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "Int16",
+          HybridType:  hybrids.Int16,
           OmniqlType:  "Int16",
           ErrorMsg:    err.Error(),
           }
@@ -184,7 +184,7 @@ func (d *Decoder) decodeInt16(path string, number interface{}, fn hybrids.FieldN
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "Int16",
+          HybridType:  hybrids.Int16,
           OmniqlType:  "Int16",
           ErrorMsg:    err.Error(),
        }
@@ -233,7 +233,7 @@ func (d *Decoder) decodeUint16(path string, number interface{}, fn hybrids.Field
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "Uint16",
+          HybridType:  hybrids.Uint16,
           OmniqlType:  "Uint16",
           ErrorMsg:    err.Error(),
           }
@@ -246,7 +246,7 @@ func (d *Decoder) decodeUint16(path string, number interface{}, fn hybrids.Field
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "Uint16",
+          HybridType:  hybrids.Uint16,
           OmniqlType:  "Uint16",
           ErrorMsg:    err.Error(),
        }
@@ -295,7 +295,7 @@ func (d *Decoder) decodeInt32(path string, number interface{}, fn hybrids.FieldN
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "Int32",
+          HybridType:  hybrids.Int32,
           OmniqlType:  "Int32",
           ErrorMsg:    err.Error(),
           }
@@ -308,7 +308,7 @@ func (d *Decoder) decodeInt32(path string, number interface{}, fn hybrids.FieldN
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "Int32",
+          HybridType:  hybrids.Int32,
           OmniqlType:  "Int32",
           ErrorMsg:    err.Error(),
        }
@@ -357,7 +357,7 @@ func (d *Decoder) decodeUint32(path string, number interface{}, fn hybrids.Field
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "Uint32",
+          HybridType:  hybrids.Uint32,
           OmniqlType:  "Uint32",
           ErrorMsg:    err.Error(),
           }
@@ -370,7 +370,7 @@ func (d *Decoder) decodeUint32(path string, number interface{}, fn hybrids.Field
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "Uint32",
+          HybridType:  hybrids.Uint32,
           OmniqlType:  "Uint32",
           ErrorMsg:    err.Error(),
        }
@@ -419,7 +419,7 @@ func (d *Decoder) decodeFloat32(path string, number interface{}, fn hybrids.Fiel
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "Float32",
+          HybridType:  hybrids.Float32,
           OmniqlType:  "Float32",
           ErrorMsg:    err.Error(),
           }
@@ -432,7 +432,7 @@ func (d *Decoder) decodeFloat32(path string, number interface{}, fn hybrids.Fiel
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "Float32",
+          HybridType:  hybrids.Float32,
           OmniqlType:  "Float32",
           ErrorMsg:    err.Error(),
        }
@@ -454,24 +454,22 @@ func (d *Decoder) decodeVectorInt8(path string, value interface{}, fn hybrids.Fi
             err = &DecodeError{
                 Path:        path,
                 Application: d.application,
-                HybridType:  "VectorInt8",
-                OmniqlType:  "Vector",
-                OmniqlItems:  "Int8",
+                HybridType:  hybrids.VectorInt8,
+                OmniqlType:  "Vector[Int8]",
                 ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
         }
         return
        }
 	}
 
-    vector, err = tw.UpsertVectorInt8(fn)
+    vector, err = tw.SetVectorInt8(fn)
 
     if err != nil {
        err = &DecodeError{
            Path:        path,
            Application: d.application,
-           HybridType:  "VectorInt8",
-           OmniqlType:  "Vector",
-           OmniqlItems:  "Int8",
+           HybridType:  hybrids.VectorInt8,
+           OmniqlType:  "Vector[Int8]",
            ErrorMsg:    err.Error(),
        }
        return
@@ -486,9 +484,8 @@ func (d *Decoder) decodeVectorInt8(path string, value interface{}, fn hybrids.Fi
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorInt8",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Int8",
+               HybridType:  hybrids.VectorInt8,
+               OmniqlType:  "Vector[Int8]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -498,9 +495,8 @@ func (d *Decoder) decodeVectorInt8(path string, value interface{}, fn hybrids.Fi
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorInt8",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Int8",
+               HybridType:   hybrids.VectorInt8,
+               OmniqlType:  "Vector[Int8]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -522,24 +518,22 @@ func (d *Decoder) decodeVectorUint8(path string, value interface{}, fn hybrids.F
             err = &DecodeError{
                 Path:        path,
                 Application: d.application,
-                HybridType:  "VectorUint8",
-                OmniqlType:  "Vector",
-                OmniqlItems:  "Uint8",
+                HybridType:  hybrids.VectorUint8,
+                OmniqlType:  "Vector[Uint8]",
                 ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
         }
         return
        }
 	}
 
-    vector, err = tw.UpsertVectorUint8(fn)
+    vector, err = tw.SetVectorUint8(fn)
 
     if err != nil {
        err = &DecodeError{
            Path:        path,
            Application: d.application,
-           HybridType:  "VectorUint8",
-           OmniqlType:  "Vector",
-           OmniqlItems:  "Uint8",
+           HybridType:  hybrids.VectorUint8,
+           OmniqlType:  "Vector[Uint8]",
            ErrorMsg:    err.Error(),
        }
        return
@@ -554,9 +548,8 @@ func (d *Decoder) decodeVectorUint8(path string, value interface{}, fn hybrids.F
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorUint8",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Uint8",
+               HybridType:  hybrids.VectorUint8,
+               OmniqlType:  "Vector[Uint8]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -566,9 +559,8 @@ func (d *Decoder) decodeVectorUint8(path string, value interface{}, fn hybrids.F
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorUint8",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Uint8",
+               HybridType:   hybrids.VectorUint8,
+               OmniqlType:  "Vector[Uint8]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -590,24 +582,22 @@ func (d *Decoder) decodeVectorInt16(path string, value interface{}, fn hybrids.F
             err = &DecodeError{
                 Path:        path,
                 Application: d.application,
-                HybridType:  "VectorInt16",
-                OmniqlType:  "Vector",
-                OmniqlItems:  "Int16",
+                HybridType:  hybrids.VectorInt16,
+                OmniqlType:  "Vector[Int16]",
                 ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
         }
         return
        }
 	}
 
-    vector, err = tw.UpsertVectorInt16(fn)
+    vector, err = tw.SetVectorInt16(fn)
 
     if err != nil {
        err = &DecodeError{
            Path:        path,
            Application: d.application,
-           HybridType:  "VectorInt16",
-           OmniqlType:  "Vector",
-           OmniqlItems:  "Int16",
+           HybridType:  hybrids.VectorInt16,
+           OmniqlType:  "Vector[Int16]",
            ErrorMsg:    err.Error(),
        }
        return
@@ -622,9 +612,8 @@ func (d *Decoder) decodeVectorInt16(path string, value interface{}, fn hybrids.F
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorInt16",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Int16",
+               HybridType:  hybrids.VectorInt16,
+               OmniqlType:  "Vector[Int16]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -634,9 +623,8 @@ func (d *Decoder) decodeVectorInt16(path string, value interface{}, fn hybrids.F
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorInt16",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Int16",
+               HybridType:   hybrids.VectorInt16,
+               OmniqlType:  "Vector[Int16]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -658,24 +646,22 @@ func (d *Decoder) decodeVectorUint16(path string, value interface{}, fn hybrids.
             err = &DecodeError{
                 Path:        path,
                 Application: d.application,
-                HybridType:  "VectorUint16",
-                OmniqlType:  "Vector",
-                OmniqlItems:  "Uint16",
+                HybridType:  hybrids.VectorUint16,
+                OmniqlType:  "Vector[Uint16]",
                 ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
         }
         return
        }
 	}
 
-    vector, err = tw.UpsertVectorUint16(fn)
+    vector, err = tw.SetVectorUint16(fn)
 
     if err != nil {
        err = &DecodeError{
            Path:        path,
            Application: d.application,
-           HybridType:  "VectorUint16",
-           OmniqlType:  "Vector",
-           OmniqlItems:  "Uint16",
+           HybridType:  hybrids.VectorUint16,
+           OmniqlType:  "Vector[Uint16]",
            ErrorMsg:    err.Error(),
        }
        return
@@ -690,9 +676,8 @@ func (d *Decoder) decodeVectorUint16(path string, value interface{}, fn hybrids.
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorUint16",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Uint16",
+               HybridType:  hybrids.VectorUint16,
+               OmniqlType:  "Vector[Uint16]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -702,9 +687,8 @@ func (d *Decoder) decodeVectorUint16(path string, value interface{}, fn hybrids.
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorUint16",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Uint16",
+               HybridType:   hybrids.VectorUint16,
+               OmniqlType:  "Vector[Uint16]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -726,24 +710,22 @@ func (d *Decoder) decodeVectorInt32(path string, value interface{}, fn hybrids.F
             err = &DecodeError{
                 Path:        path,
                 Application: d.application,
-                HybridType:  "VectorInt32",
-                OmniqlType:  "Vector",
-                OmniqlItems:  "Int32",
+                HybridType:  hybrids.VectorInt32,
+                OmniqlType:  "Vector[Int32]",
                 ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
         }
         return
        }
 	}
 
-    vector, err = tw.UpsertVectorInt32(fn)
+    vector, err = tw.SetVectorInt32(fn)
 
     if err != nil {
        err = &DecodeError{
            Path:        path,
            Application: d.application,
-           HybridType:  "VectorInt32",
-           OmniqlType:  "Vector",
-           OmniqlItems:  "Int32",
+           HybridType:  hybrids.VectorInt32,
+           OmniqlType:  "Vector[Int32]",
            ErrorMsg:    err.Error(),
        }
        return
@@ -758,9 +740,8 @@ func (d *Decoder) decodeVectorInt32(path string, value interface{}, fn hybrids.F
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorInt32",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Int32",
+               HybridType:  hybrids.VectorInt32,
+               OmniqlType:  "Vector[Int32]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -770,9 +751,8 @@ func (d *Decoder) decodeVectorInt32(path string, value interface{}, fn hybrids.F
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorInt32",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Int32",
+               HybridType:   hybrids.VectorInt32,
+               OmniqlType:  "Vector[Int32]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -794,24 +774,22 @@ func (d *Decoder) decodeVectorUint32(path string, value interface{}, fn hybrids.
             err = &DecodeError{
                 Path:        path,
                 Application: d.application,
-                HybridType:  "VectorUint32",
-                OmniqlType:  "Vector",
-                OmniqlItems:  "Uint32",
+                HybridType:  hybrids.VectorUint32,
+                OmniqlType:  "Vector[Uint32]",
                 ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
         }
         return
        }
 	}
 
-    vector, err = tw.UpsertVectorUint32(fn)
+    vector, err = tw.SetVectorUint32(fn)
 
     if err != nil {
        err = &DecodeError{
            Path:        path,
            Application: d.application,
-           HybridType:  "VectorUint32",
-           OmniqlType:  "Vector",
-           OmniqlItems:  "Uint32",
+           HybridType:  hybrids.VectorUint32,
+           OmniqlType:  "Vector[Uint32]",
            ErrorMsg:    err.Error(),
        }
        return
@@ -826,9 +804,8 @@ func (d *Decoder) decodeVectorUint32(path string, value interface{}, fn hybrids.
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorUint32",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Uint32",
+               HybridType:  hybrids.VectorUint32,
+               OmniqlType:  "Vector[Uint32]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -838,9 +815,8 @@ func (d *Decoder) decodeVectorUint32(path string, value interface{}, fn hybrids.
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorUint32",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Uint32",
+               HybridType:   hybrids.VectorUint32,
+               OmniqlType:  "Vector[Uint32]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -862,24 +838,22 @@ func (d *Decoder) decodeVectorFloat32(path string, value interface{}, fn hybrids
             err = &DecodeError{
                 Path:        path,
                 Application: d.application,
-                HybridType:  "VectorFloat32",
-                OmniqlType:  "Vector",
-                OmniqlItems:  "Float32",
+                HybridType:  hybrids.VectorFloat32,
+                OmniqlType:  "Vector[Float32]",
                 ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
         }
         return
        }
 	}
 
-    vector, err = tw.UpsertVectorFloat32(fn)
+    vector, err = tw.SetVectorFloat32(fn)
 
     if err != nil {
        err = &DecodeError{
            Path:        path,
            Application: d.application,
-           HybridType:  "VectorFloat32",
-           OmniqlType:  "Vector",
-           OmniqlItems:  "Float32",
+           HybridType:  hybrids.VectorFloat32,
+           OmniqlType:  "Vector[Float32]",
            ErrorMsg:    err.Error(),
        }
        return
@@ -894,9 +868,8 @@ func (d *Decoder) decodeVectorFloat32(path string, value interface{}, fn hybrids
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorFloat32",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Float32",
+               HybridType:  hybrids.VectorFloat32,
+               OmniqlType:  "Vector[Float32]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -906,9 +879,8 @@ func (d *Decoder) decodeVectorFloat32(path string, value interface{}, fn hybrids
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorFloat32",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Float32",
+               HybridType:   hybrids.VectorFloat32,
+               OmniqlType:  "Vector[Float32]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -930,24 +902,22 @@ func (d *Decoder) decodeVectorFloat64(path string, value interface{}, fn hybrids
             err = &DecodeError{
                 Path:        path,
                 Application: d.application,
-                HybridType:  "VectorFloat64",
-                OmniqlType:  "Vector",
-                OmniqlItems:  "Float64",
+                HybridType:  hybrids.VectorFloat64,
+                OmniqlType:  "Vector[Float64]",
                 ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
         }
         return
        }
 	}
 
-    vector, err = tw.UpsertVectorFloat64(fn)
+    vector, err = tw.SetVectorFloat64(fn)
 
     if err != nil {
        err = &DecodeError{
            Path:        path,
            Application: d.application,
-           HybridType:  "VectorFloat64",
-           OmniqlType:  "Vector",
-           OmniqlItems:  "Float64",
+           HybridType:  hybrids.VectorFloat64,
+           OmniqlType:  "Vector[Float64]",
            ErrorMsg:    err.Error(),
        }
        return
@@ -962,9 +932,8 @@ func (d *Decoder) decodeVectorFloat64(path string, value interface{}, fn hybrids
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorFloat64",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Float64",
+               HybridType:  hybrids.VectorFloat64,
+               OmniqlType:  "Vector[Float64]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -974,9 +943,8 @@ func (d *Decoder) decodeVectorFloat64(path string, value interface{}, fn hybrids
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorFloat64",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Float64",
+               HybridType:   hybrids.VectorFloat64,
+               OmniqlType:  "Vector[Float64]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -998,24 +966,22 @@ func (d *Decoder) decodeVectorInt64(path string, value interface{}, fn hybrids.F
             err = &DecodeError{
                 Path:        path,
                 Application: d.application,
-                HybridType:  "VectorInt64",
-                OmniqlType:  "Vector",
-                OmniqlItems:  "Int64",
+                HybridType:  hybrids.VectorInt64,
+                OmniqlType:  "Vector[Int64]",
                 ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
         }
         return
        }
 	}
 
-    vector, err = tw.UpsertVectorInt64(fn)
+    vector, err = tw.SetVectorInt64(fn)
 
     if err != nil {
        err = &DecodeError{
            Path:        path,
            Application: d.application,
-           HybridType:  "VectorInt64",
-           OmniqlType:  "Vector",
-           OmniqlItems:  "Int64",
+           HybridType:  hybrids.VectorInt64,
+           OmniqlType:  "Vector[Int64]",
            ErrorMsg:    err.Error(),
        }
        return
@@ -1030,9 +996,8 @@ func (d *Decoder) decodeVectorInt64(path string, value interface{}, fn hybrids.F
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorInt64",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Int64",
+               HybridType:  hybrids.VectorInt64,
+               OmniqlType:  "Vector[Int64]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -1042,9 +1007,8 @@ func (d *Decoder) decodeVectorInt64(path string, value interface{}, fn hybrids.F
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorInt64",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Int64",
+               HybridType:   hybrids.VectorInt64,
+               OmniqlType:  "Vector[Int64]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -1066,24 +1030,22 @@ func (d *Decoder) decodeVectorUint64(path string, value interface{}, fn hybrids.
             err = &DecodeError{
                 Path:        path,
                 Application: d.application,
-                HybridType:  "VectorUint64",
-                OmniqlType:  "Vector",
-                OmniqlItems:  "Uint64",
+                HybridType:  hybrids.VectorUint64,
+                OmniqlType:  "Vector[Uint64]",
                 ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
         }
         return
        }
 	}
 
-    vector, err = tw.UpsertVectorUint64(fn)
+    vector, err = tw.SetVectorUint64(fn)
 
     if err != nil {
        err = &DecodeError{
            Path:        path,
            Application: d.application,
-           HybridType:  "VectorUint64",
-           OmniqlType:  "Vector",
-           OmniqlItems:  "Uint64",
+           HybridType:  hybrids.VectorUint64,
+           OmniqlType:  "Vector[Uint64]",
            ErrorMsg:    err.Error(),
        }
        return
@@ -1098,9 +1060,8 @@ func (d *Decoder) decodeVectorUint64(path string, value interface{}, fn hybrids.
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorUint64",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Uint64",
+               HybridType:  hybrids.VectorUint64,
+               OmniqlType:  "Vector[Uint64]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -1110,9 +1071,8 @@ func (d *Decoder) decodeVectorUint64(path string, value interface{}, fn hybrids.
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "VectorUint64",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "Uint64",
+               HybridType:   hybrids.VectorUint64,
+               OmniqlType:  "Vector[Uint64]",
                ErrorMsg:    err.Error(),
             }
             return

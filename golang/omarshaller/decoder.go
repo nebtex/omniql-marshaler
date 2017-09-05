@@ -6,12 +6,13 @@ import (
 	"fmt"
 	"strconv"
 	"reflect"
+	"github.com/nebtex/omnibuff/tools/golang/tools/oreflection"
 )
 
 type Decoder struct {
 	application string
 	//reflection  hybrids.SimpleStore
-	zap *zap.Logger
+	reflect oreflection.ReflectStore
 }
 
 /*
@@ -39,7 +40,39 @@ func (d *Decoder) decode(path string, data interface{}, fieldType string, items 
 
 }
 
-func (d *Decoder) decodeScalar(path string, number float64, tw hybrids.TableWriter) (err error) {
+func (d *Decoder) decodeScalar(path string, value interface{}, fieldType hybrids.Types, fn hybrids.FieldNumber, sw hybrids.ScalarWriter) (err error) {
+	switch  fieldType {
+	case hybrids.Boolean:
+		err = d.decodeBoolean(path, value, fn, sw)
+	case hybrids.Int8:
+		err = d.decodeInt8(path, value, fn, sw)
+	case hybrids.Uint8:
+		err = d.decodeUint8(path, value, fn, sw)
+	case hybrids.Int16:
+		err = d.decodeInt16(path, value, fn, sw)
+	case hybrids.Uint16:
+		err = d.decodeUint16(path, value, fn, sw)
+	case hybrids.Int32:
+		err = d.decodeInt32(path, value, fn, sw)
+	case hybrids.Uint32:
+		err = d.decodeUint32(path, value, fn, sw)
+	case hybrids.Int64:
+		err = d.decodeInt64(path, value, fn, sw)
+	case hybrids.Uint64:
+		err = d.decodeUint64(path, value, fn, sw)
+	case hybrids.Float32:
+		err = d.decodeFloat32(path, value, fn, sw)
+	case hybrids.Float64:
+		err = d.decodeFloat64(path, value, fn, sw)
+	default:
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			OmniqlType:  "Scalar",
+			ErrorMsg:    fmt.Sprintf("%s not recognized as scalar, this error should not happend :(", fieldType),
+		}
+	}
+
 	return
 }
 
@@ -70,7 +103,7 @@ func (d *Decoder) decodeFloat64(path string, number interface{}, fn hybrids.Fiel
 		err = &DecodeError{
 			Path:        path,
 			Application: d.application,
-			HybridType:  "Float64",
+			HybridType:  hybrids.Float64,
 			OmniqlType:  "Float64",
 			ErrorMsg:    err.Error(),
 		}
@@ -83,7 +116,7 @@ func (d *Decoder) decodeFloat64(path string, number interface{}, fn hybrids.Fiel
 		err = &DecodeError{
 			Path:        path,
 			Application: d.application,
-			HybridType:  "Float64",
+			HybridType:  hybrids.Float64,
 			OmniqlType:  "Float64",
 			ErrorMsg:    err.Error(),
 		}
@@ -142,7 +175,7 @@ func (d *Decoder) decodeInt64(path string, number interface{}, fn hybrids.FieldN
 		err = &DecodeError{
 			Path:        path,
 			Application: d.application,
-			HybridType:  "Int64",
+			HybridType:  hybrids.Int64,
 			OmniqlType:  "Int64",
 			ErrorMsg:    err.Error(),
 		}
@@ -155,7 +188,7 @@ func (d *Decoder) decodeInt64(path string, number interface{}, fn hybrids.FieldN
 		err = &DecodeError{
 			Path:        path,
 			Application: d.application,
-			HybridType:  "Int64",
+			HybridType:  hybrids.Int64,
 			OmniqlType:  "Int64",
 			ErrorMsg:    err.Error(),
 		}
@@ -214,7 +247,7 @@ func (d *Decoder) decodeUint64(path string, number interface{}, fn hybrids.Field
 		err = &DecodeError{
 			Path:        path,
 			Application: d.application,
-			HybridType:  "Uint64",
+			HybridType:  hybrids.Uint64,
 			OmniqlType:  "Uint64",
 			ErrorMsg:    err.Error(),
 		}
@@ -227,7 +260,7 @@ func (d *Decoder) decodeUint64(path string, number interface{}, fn hybrids.Field
 		err = &DecodeError{
 			Path:        path,
 			Application: d.application,
-			HybridType:  "Uint64",
+			HybridType:  hybrids.Uint64,
 			OmniqlType:  "Uint64",
 			ErrorMsg:    err.Error(),
 		}
@@ -263,7 +296,7 @@ func (d *Decoder) decodeBoolean(path string, number interface{}, fn hybrids.Fiel
 		err = &DecodeError{
 			Path:        path,
 			Application: d.application,
-			HybridType:  "Boolean",
+			HybridType:  hybrids.Boolean,
 			OmniqlType:  "Boolean",
 			ErrorMsg:    err.Error(),
 		}
@@ -276,7 +309,7 @@ func (d *Decoder) decodeBoolean(path string, number interface{}, fn hybrids.Fiel
 		err = &DecodeError{
 			Path:        path,
 			Application: d.application,
-			HybridType:  "Boolean",
+			HybridType:  hybrids.Boolean,
 			OmniqlType:  "Boolean",
 			ErrorMsg:    err.Error(),
 		}
@@ -299,24 +332,22 @@ func (d *Decoder) decodeVectorBoolean(path string, value interface{}, fn hybrids
 			err = &DecodeError{
 				Path:        path,
 				Application: d.application,
-				HybridType:  "VectorBoolean",
-				OmniqlType:  "Vector",
-				OmniqlItems: "Boolean",
+				HybridType:  hybrids.VectorBoolean,
+				OmniqlType:  "Vector[Boolean]",
 				ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
 			}
 			return
 		}
 	}
 
-	vector, err = tw.UpsertVectorBoolean(fn)
+	vector, err = tw.SetVectorBoolean(fn)
 
 	if err != nil {
 		err = &DecodeError{
 			Path:        path,
 			Application: d.application,
-			HybridType:  "VectorBoolean",
-			OmniqlType:  "Vector",
-			OmniqlItems: "Boolean",
+			HybridType:  hybrids.VectorBoolean,
+			OmniqlType:  "Vector[Boolean]",
 			ErrorMsg:    err.Error(),
 		}
 		return
@@ -331,9 +362,8 @@ func (d *Decoder) decodeVectorBoolean(path string, value interface{}, fn hybrids
 			err = &DecodeError{
 				Path:        fmt.Sprintf("%s[%d]", path, index),
 				Application: d.application,
-				HybridType:  "VectorBoolean",
-				OmniqlType:  "Vector",
-				OmniqlItems: "Boolean",
+				HybridType:  hybrids.VectorBoolean,
+				OmniqlType:  "Vector[Boolean]",
 				ErrorMsg:    err.Error(),
 			}
 			return
@@ -343,9 +373,8 @@ func (d *Decoder) decodeVectorBoolean(path string, value interface{}, fn hybrids
 			err = &DecodeError{
 				Path:        fmt.Sprintf("%s[%d]", path, index),
 				Application: d.application,
-				HybridType:  "VectorBoolean",
+				HybridType:  hybrids.VectorBoolean,
 				OmniqlType:  "Vector",
-				OmniqlItems: "Boolean",
 				ErrorMsg:    err.Error(),
 			}
 			return

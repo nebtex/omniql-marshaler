@@ -436,7 +436,7 @@ func Test_Decode_VectorInt8(t *testing.T) {
 			vector                  interface{}
 			mockVector              []int8
 			shouldFail              bool
-			makeUpsertVectorFail    bool
+			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
@@ -467,9 +467,9 @@ func Test_Decode_VectorInt8(t *testing.T) {
 
 				vectorInt8Mock := &mocks.VectorInt8WriterAccessor{}
 
-				call := vectorInt8Mock.On("UpsertVectorInt8", ti.fn)
-				if ti.makeUpsertVectorFail {
-					call.Return(nil, fmt.Errorf("UpsertVectorInt8 failed"))
+				call := vectorInt8Mock.On("SetVectorInt8", ti.fn)
+				if ti.makeSetVectorFail {
+					call.Return(nil, fmt.Errorf("SetVectorInt8 failed"))
 				} else {
 					call.Return(int8Mock, nil)
 				}
@@ -482,15 +482,14 @@ func Test_Decode_VectorInt8(t *testing.T) {
 					So(err, ShouldNotBeNil)
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
-					So(de.HybridType, ShouldEqual, "VectorInt8")
-					So(de.OmniqlType, ShouldEqual, "Vector")
-					So(de.OmniqlItems, ShouldEqual, "Int8")
+					So(de.HybridType, ShouldEqual, hybrids.VectorInt8)
+					So(de.OmniqlType, ShouldEqual, "Vector[Int8]")
 
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeUpsertVectorFail {
-							vectorInt8Mock.AssertCalled(t, "UpsertVectorInt8", ti.fn)
+						if !ti.makeSetVectorFail {
+							vectorInt8Mock.AssertCalled(t, "SetVectorInt8", ti.fn)
 						}
 
 						if !ti.makePushFail {
@@ -515,7 +514,7 @@ func Test_Decode_VectorUint8(t *testing.T) {
 			vector                  interface{}
 			mockVector              []uint8
 			shouldFail              bool
-			makeUpsertVectorFail    bool
+			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
@@ -546,9 +545,9 @@ func Test_Decode_VectorUint8(t *testing.T) {
 
 				vectorUint8Mock := &mocks.VectorUint8WriterAccessor{}
 
-				call := vectorUint8Mock.On("UpsertVectorUint8", ti.fn)
-				if ti.makeUpsertVectorFail {
-					call.Return(nil, fmt.Errorf("UpsertVectorUint8 failed"))
+				call := vectorUint8Mock.On("SetVectorUint8", ti.fn)
+				if ti.makeSetVectorFail {
+					call.Return(nil, fmt.Errorf("SetVectorUint8 failed"))
 				} else {
 					call.Return(uint8Mock, nil)
 				}
@@ -561,15 +560,14 @@ func Test_Decode_VectorUint8(t *testing.T) {
 					So(err, ShouldNotBeNil)
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
-					So(de.HybridType, ShouldEqual, "VectorUint8")
-					So(de.OmniqlType, ShouldEqual, "Vector")
-					So(de.OmniqlItems, ShouldEqual, "Uint8")
+					So(de.HybridType, ShouldEqual, hybrids.VectorUint8)
+					So(de.OmniqlType, ShouldEqual, "Vector[Uint8]")
 
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeUpsertVectorFail {
-							vectorUint8Mock.AssertCalled(t, "UpsertVectorUint8", ti.fn)
+						if !ti.makeSetVectorFail {
+							vectorUint8Mock.AssertCalled(t, "SetVectorUint8", ti.fn)
 						}
 
 						if !ti.makePushFail {
@@ -594,7 +592,7 @@ func Test_Decode_VectorInt16(t *testing.T) {
 			vector                  interface{}
 			mockVector              []int16
 			shouldFail              bool
-			makeUpsertVectorFail    bool
+			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
@@ -625,9 +623,9 @@ func Test_Decode_VectorInt16(t *testing.T) {
 
 				vectorInt16Mock := &mocks.VectorInt16WriterAccessor{}
 
-				call := vectorInt16Mock.On("UpsertVectorInt16", ti.fn)
-				if ti.makeUpsertVectorFail {
-					call.Return(nil, fmt.Errorf("UpsertVectorInt16 failed"))
+				call := vectorInt16Mock.On("SetVectorInt16", ti.fn)
+				if ti.makeSetVectorFail {
+					call.Return(nil, fmt.Errorf("SetVectorInt16 failed"))
 				} else {
 					call.Return(int16Mock, nil)
 				}
@@ -640,15 +638,14 @@ func Test_Decode_VectorInt16(t *testing.T) {
 					So(err, ShouldNotBeNil)
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
-					So(de.HybridType, ShouldEqual, "VectorInt16")
-					So(de.OmniqlType, ShouldEqual, "Vector")
-					So(de.OmniqlItems, ShouldEqual, "Int16")
+					So(de.HybridType, ShouldEqual, hybrids.VectorInt16)
+					So(de.OmniqlType, ShouldEqual, "Vector[Int16]")
 
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeUpsertVectorFail {
-							vectorInt16Mock.AssertCalled(t, "UpsertVectorInt16", ti.fn)
+						if !ti.makeSetVectorFail {
+							vectorInt16Mock.AssertCalled(t, "SetVectorInt16", ti.fn)
 						}
 
 						if !ti.makePushFail {
@@ -673,7 +670,7 @@ func Test_Decode_VectorUint16(t *testing.T) {
 			vector                  interface{}
 			mockVector              []uint16
 			shouldFail              bool
-			makeUpsertVectorFail    bool
+			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
@@ -704,9 +701,9 @@ func Test_Decode_VectorUint16(t *testing.T) {
 
 				vectorUint16Mock := &mocks.VectorUint16WriterAccessor{}
 
-				call := vectorUint16Mock.On("UpsertVectorUint16", ti.fn)
-				if ti.makeUpsertVectorFail {
-					call.Return(nil, fmt.Errorf("UpsertVectorUint16 failed"))
+				call := vectorUint16Mock.On("SetVectorUint16", ti.fn)
+				if ti.makeSetVectorFail {
+					call.Return(nil, fmt.Errorf("SetVectorUint16 failed"))
 				} else {
 					call.Return(uint16Mock, nil)
 				}
@@ -719,15 +716,14 @@ func Test_Decode_VectorUint16(t *testing.T) {
 					So(err, ShouldNotBeNil)
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
-					So(de.HybridType, ShouldEqual, "VectorUint16")
-					So(de.OmniqlType, ShouldEqual, "Vector")
-					So(de.OmniqlItems, ShouldEqual, "Uint16")
+					So(de.HybridType, ShouldEqual, hybrids.VectorUint16)
+					So(de.OmniqlType, ShouldEqual, "Vector[Uint16]")
 
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeUpsertVectorFail {
-							vectorUint16Mock.AssertCalled(t, "UpsertVectorUint16", ti.fn)
+						if !ti.makeSetVectorFail {
+							vectorUint16Mock.AssertCalled(t, "SetVectorUint16", ti.fn)
 						}
 
 						if !ti.makePushFail {
@@ -752,7 +748,7 @@ func Test_Decode_VectorInt32(t *testing.T) {
 			vector                  interface{}
 			mockVector              []int32
 			shouldFail              bool
-			makeUpsertVectorFail    bool
+			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
@@ -783,9 +779,9 @@ func Test_Decode_VectorInt32(t *testing.T) {
 
 				vectorInt32Mock := &mocks.VectorInt32WriterAccessor{}
 
-				call := vectorInt32Mock.On("UpsertVectorInt32", ti.fn)
-				if ti.makeUpsertVectorFail {
-					call.Return(nil, fmt.Errorf("UpsertVectorInt32 failed"))
+				call := vectorInt32Mock.On("SetVectorInt32", ti.fn)
+				if ti.makeSetVectorFail {
+					call.Return(nil, fmt.Errorf("SetVectorInt32 failed"))
 				} else {
 					call.Return(int32Mock, nil)
 				}
@@ -798,15 +794,14 @@ func Test_Decode_VectorInt32(t *testing.T) {
 					So(err, ShouldNotBeNil)
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
-					So(de.HybridType, ShouldEqual, "VectorInt32")
-					So(de.OmniqlType, ShouldEqual, "Vector")
-					So(de.OmniqlItems, ShouldEqual, "Int32")
+					So(de.HybridType, ShouldEqual, hybrids.VectorInt32)
+					So(de.OmniqlType, ShouldEqual, "Vector[Int32]")
 
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeUpsertVectorFail {
-							vectorInt32Mock.AssertCalled(t, "UpsertVectorInt32", ti.fn)
+						if !ti.makeSetVectorFail {
+							vectorInt32Mock.AssertCalled(t, "SetVectorInt32", ti.fn)
 						}
 
 						if !ti.makePushFail {
@@ -831,7 +826,7 @@ func Test_Decode_VectorUint32(t *testing.T) {
 			vector                  interface{}
 			mockVector              []uint32
 			shouldFail              bool
-			makeUpsertVectorFail    bool
+			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
@@ -862,9 +857,9 @@ func Test_Decode_VectorUint32(t *testing.T) {
 
 				vectorUint32Mock := &mocks.VectorUint32WriterAccessor{}
 
-				call := vectorUint32Mock.On("UpsertVectorUint32", ti.fn)
-				if ti.makeUpsertVectorFail {
-					call.Return(nil, fmt.Errorf("UpsertVectorUint32 failed"))
+				call := vectorUint32Mock.On("SetVectorUint32", ti.fn)
+				if ti.makeSetVectorFail {
+					call.Return(nil, fmt.Errorf("SetVectorUint32 failed"))
 				} else {
 					call.Return(uint32Mock, nil)
 				}
@@ -877,15 +872,14 @@ func Test_Decode_VectorUint32(t *testing.T) {
 					So(err, ShouldNotBeNil)
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
-					So(de.HybridType, ShouldEqual, "VectorUint32")
-					So(de.OmniqlType, ShouldEqual, "Vector")
-					So(de.OmniqlItems, ShouldEqual, "Uint32")
+					So(de.HybridType, ShouldEqual, hybrids.VectorUint32)
+					So(de.OmniqlType, ShouldEqual, "Vector[Uint32]")
 
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeUpsertVectorFail {
-							vectorUint32Mock.AssertCalled(t, "UpsertVectorUint32", ti.fn)
+						if !ti.makeSetVectorFail {
+							vectorUint32Mock.AssertCalled(t, "SetVectorUint32", ti.fn)
 						}
 
 						if !ti.makePushFail {
@@ -910,7 +904,7 @@ func Test_Decode_VectorFloat32(t *testing.T) {
 			vector                  interface{}
 			mockVector              []float32
 			shouldFail              bool
-			makeUpsertVectorFail    bool
+			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
@@ -941,9 +935,9 @@ func Test_Decode_VectorFloat32(t *testing.T) {
 
 				vectorFloat32Mock := &mocks.VectorFloat32WriterAccessor{}
 
-				call := vectorFloat32Mock.On("UpsertVectorFloat32", ti.fn)
-				if ti.makeUpsertVectorFail {
-					call.Return(nil, fmt.Errorf("UpsertVectorFloat32 failed"))
+				call := vectorFloat32Mock.On("SetVectorFloat32", ti.fn)
+				if ti.makeSetVectorFail {
+					call.Return(nil, fmt.Errorf("SetVectorFloat32 failed"))
 				} else {
 					call.Return(float32Mock, nil)
 				}
@@ -956,15 +950,14 @@ func Test_Decode_VectorFloat32(t *testing.T) {
 					So(err, ShouldNotBeNil)
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
-					So(de.HybridType, ShouldEqual, "VectorFloat32")
-					So(de.OmniqlType, ShouldEqual, "Vector")
-					So(de.OmniqlItems, ShouldEqual, "Float32")
+					So(de.HybridType, ShouldEqual, hybrids.VectorFloat32)
+					So(de.OmniqlType, ShouldEqual, "Vector[Float32]")
 
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeUpsertVectorFail {
-							vectorFloat32Mock.AssertCalled(t, "UpsertVectorFloat32", ti.fn)
+						if !ti.makeSetVectorFail {
+							vectorFloat32Mock.AssertCalled(t, "SetVectorFloat32", ti.fn)
 						}
 
 						if !ti.makePushFail {
@@ -989,7 +982,7 @@ func Test_Decode_VectorFloat64(t *testing.T) {
 			vector                  interface{}
 			mockVector              []float64
 			shouldFail              bool
-			makeUpsertVectorFail    bool
+			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
@@ -1020,9 +1013,9 @@ func Test_Decode_VectorFloat64(t *testing.T) {
 
 				vectorFloat64Mock := &mocks.VectorFloat64WriterAccessor{}
 
-				call := vectorFloat64Mock.On("UpsertVectorFloat64", ti.fn)
-				if ti.makeUpsertVectorFail {
-					call.Return(nil, fmt.Errorf("UpsertVectorFloat64 failed"))
+				call := vectorFloat64Mock.On("SetVectorFloat64", ti.fn)
+				if ti.makeSetVectorFail {
+					call.Return(nil, fmt.Errorf("SetVectorFloat64 failed"))
 				} else {
 					call.Return(float64Mock, nil)
 				}
@@ -1035,15 +1028,14 @@ func Test_Decode_VectorFloat64(t *testing.T) {
 					So(err, ShouldNotBeNil)
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
-					So(de.HybridType, ShouldEqual, "VectorFloat64")
-					So(de.OmniqlType, ShouldEqual, "Vector")
-					So(de.OmniqlItems, ShouldEqual, "Float64")
+					So(de.HybridType, ShouldEqual, hybrids.VectorFloat64)
+					So(de.OmniqlType, ShouldEqual, "Vector[Float64]")
 
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeUpsertVectorFail {
-							vectorFloat64Mock.AssertCalled(t, "UpsertVectorFloat64", ti.fn)
+						if !ti.makeSetVectorFail {
+							vectorFloat64Mock.AssertCalled(t, "SetVectorFloat64", ti.fn)
 						}
 
 						if !ti.makePushFail {
@@ -1068,7 +1060,7 @@ func Test_Decode_VectorInt64(t *testing.T) {
 			vector                  interface{}
 			mockVector              []int64
 			shouldFail              bool
-			makeUpsertVectorFail    bool
+			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
@@ -1099,9 +1091,9 @@ func Test_Decode_VectorInt64(t *testing.T) {
 
 				vectorInt64Mock := &mocks.VectorInt64WriterAccessor{}
 
-				call := vectorInt64Mock.On("UpsertVectorInt64", ti.fn)
-				if ti.makeUpsertVectorFail {
-					call.Return(nil, fmt.Errorf("UpsertVectorInt64 failed"))
+				call := vectorInt64Mock.On("SetVectorInt64", ti.fn)
+				if ti.makeSetVectorFail {
+					call.Return(nil, fmt.Errorf("SetVectorInt64 failed"))
 				} else {
 					call.Return(int64Mock, nil)
 				}
@@ -1114,15 +1106,14 @@ func Test_Decode_VectorInt64(t *testing.T) {
 					So(err, ShouldNotBeNil)
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
-					So(de.HybridType, ShouldEqual, "VectorInt64")
-					So(de.OmniqlType, ShouldEqual, "Vector")
-					So(de.OmniqlItems, ShouldEqual, "Int64")
+					So(de.HybridType, ShouldEqual, hybrids.VectorInt64)
+					So(de.OmniqlType, ShouldEqual, "Vector[Int64]")
 
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeUpsertVectorFail {
-							vectorInt64Mock.AssertCalled(t, "UpsertVectorInt64", ti.fn)
+						if !ti.makeSetVectorFail {
+							vectorInt64Mock.AssertCalled(t, "SetVectorInt64", ti.fn)
 						}
 
 						if !ti.makePushFail {
@@ -1147,7 +1138,7 @@ func Test_Decode_VectorUint64(t *testing.T) {
 			vector                  interface{}
 			mockVector              []uint64
 			shouldFail              bool
-			makeUpsertVectorFail    bool
+			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
@@ -1178,9 +1169,9 @@ func Test_Decode_VectorUint64(t *testing.T) {
 
 				vectorUint64Mock := &mocks.VectorUint64WriterAccessor{}
 
-				call := vectorUint64Mock.On("UpsertVectorUint64", ti.fn)
-				if ti.makeUpsertVectorFail {
-					call.Return(nil, fmt.Errorf("UpsertVectorUint64 failed"))
+				call := vectorUint64Mock.On("SetVectorUint64", ti.fn)
+				if ti.makeSetVectorFail {
+					call.Return(nil, fmt.Errorf("SetVectorUint64 failed"))
 				} else {
 					call.Return(uint64Mock, nil)
 				}
@@ -1193,15 +1184,14 @@ func Test_Decode_VectorUint64(t *testing.T) {
 					So(err, ShouldNotBeNil)
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
-					So(de.HybridType, ShouldEqual, "VectorUint64")
-					So(de.OmniqlType, ShouldEqual, "Vector")
-					So(de.OmniqlItems, ShouldEqual, "Uint64")
+					So(de.HybridType, ShouldEqual, hybrids.VectorUint64)
+					So(de.OmniqlType, ShouldEqual, "Vector[Uint64]")
 
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeUpsertVectorFail {
-							vectorUint64Mock.AssertCalled(t, "UpsertVectorUint64", ti.fn)
+						if !ti.makeSetVectorFail {
+							vectorUint64Mock.AssertCalled(t, "SetVectorUint64", ti.fn)
 						}
 
 						if !ti.makePushFail {

@@ -61,7 +61,7 @@ func (d *Decoder) decode{{.scalar.String}}(path string, number interface{}, fn h
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "{{.scalar.String}}",
+          HybridType:  hybrids.{{.scalar.String}},
           OmniqlType:  "{{.scalar.String}}",
           ErrorMsg:    err.Error(),
           }
@@ -74,7 +74,7 @@ func (d *Decoder) decode{{.scalar.String}}(path string, number interface{}, fn h
        err = &DecodeError{
           Path:        path,
           Application: d.application,
-          HybridType:  "{{.scalar.String}}",
+          HybridType:  hybrids.{{.scalar.String}},
           OmniqlType:  "{{.scalar.String}}",
           ErrorMsg:    err.Error(),
        }
@@ -85,7 +85,7 @@ func (d *Decoder) decode{{.scalar.String}}(path string, number interface{}, fn h
 `)
 	die(err)
 
-	scalars := []hybrids.BasicTypes{
+	scalars := []hybrids.Types{
 		hybrids.Int8,
 		hybrids.Uint8,
 		hybrids.Int16,
@@ -169,7 +169,7 @@ func Test_Decoder{{.scalar.String}}(t *testing.T) {
 `)
 	die(err)
 
-	scalars := []hybrids.BasicTypes{
+	scalars := []hybrids.Types{
 		hybrids.Int8,
 		hybrids.Uint8,
 		hybrids.Int16,
@@ -205,24 +205,22 @@ func (d *Decoder) decodeVector{{.scalar.String}}(path string, value interface{},
             err = &DecodeError{
                 Path:        path,
                 Application: d.application,
-                HybridType:  "Vector{{.scalar.String}}",
-                OmniqlType:  "Vector",
-                OmniqlItems:  "{{.scalar.String}}",
+                HybridType:  hybrids.Vector{{.scalar.String}},
+                OmniqlType:  "Vector[{{.scalar.String}}]",
                 ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
         }
         return
        }
 	}
 
-    vector, err = tw.UpsertVector{{.scalar.String}}(fn)
+    vector, err = tw.SetVector{{.scalar.String}}(fn)
 
     if err != nil {
        err = &DecodeError{
            Path:        path,
            Application: d.application,
-           HybridType:  "Vector{{.scalar.String}}",
-           OmniqlType:  "Vector",
-           OmniqlItems:  "{{.scalar.String}}",
+           HybridType:  hybrids.Vector{{.scalar.String}},
+           OmniqlType:  "Vector[{{.scalar.String}}]",
            ErrorMsg:    err.Error(),
        }
        return
@@ -237,9 +235,8 @@ func (d *Decoder) decodeVector{{.scalar.String}}(path string, value interface{},
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "Vector{{.scalar.String}}",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "{{.scalar.String}}",
+               HybridType:  hybrids.Vector{{.scalar.String}},
+               OmniqlType:  "Vector[{{.scalar.String}}]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -249,9 +246,8 @@ func (d *Decoder) decodeVector{{.scalar.String}}(path string, value interface{},
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
                Application: d.application,
-               HybridType:  "Vector{{.scalar.String}}",
-               OmniqlType:  "Vector",
-               OmniqlItems:  "{{.scalar.String}}",
+               HybridType:   hybrids.Vector{{.scalar.String}},
+               OmniqlType:  "Vector[{{.scalar.String}}]",
                ErrorMsg:    err.Error(),
             }
             return
@@ -262,7 +258,7 @@ func (d *Decoder) decodeVector{{.scalar.String}}(path string, value interface{},
 `)
 
 	die(err)
-	scalars := []hybrids.BasicTypes{
+	scalars := []hybrids.Types{
 		hybrids.Int8,
 		hybrids.Uint8,
 		hybrids.Int16,
@@ -295,7 +291,7 @@ func Test_Decode_Vector{{.scalar.String}}(t *testing.T) {
 			vector                  interface{}
 			mockVector              []{{.scalar.NativeType}}
 			shouldFail              bool
-			makeUpsertVectorFail    bool
+			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
@@ -326,9 +322,9 @@ func Test_Decode_Vector{{.scalar.String}}(t *testing.T) {
 
 				vector{{.scalar.String}}Mock := &mocks.Vector{{.scalar.String}}WriterAccessor{}
 
-				call := vector{{.scalar.String}}Mock.On("UpsertVector{{.scalar.String}}", ti.fn)
-				if ti.makeUpsertVectorFail {
-					call.Return(nil, fmt.Errorf("UpsertVector{{.scalar.String}} failed"))
+				call := vector{{.scalar.String}}Mock.On("SetVector{{.scalar.String}}", ti.fn)
+				if ti.makeSetVectorFail {
+					call.Return(nil, fmt.Errorf("SetVector{{.scalar.String}} failed"))
 				} else {
 					call.Return({{.scalar.NativeType}}Mock, nil)
 				}
@@ -341,15 +337,14 @@ func Test_Decode_Vector{{.scalar.String}}(t *testing.T) {
 					So(err, ShouldNotBeNil)
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
-					So(de.HybridType, ShouldEqual, "Vector{{.scalar.String}}")
-					So(de.OmniqlType, ShouldEqual, "Vector")
-					So(de.OmniqlItems, ShouldEqual, "{{.scalar.String}}")
+					So(de.HybridType, ShouldEqual, hybrids.Vector{{.scalar.String}})
+					So(de.OmniqlType, ShouldEqual, "Vector[{{.scalar.String}}]")
 
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeUpsertVectorFail {
-							vector{{.scalar.String}}Mock.AssertCalled(t, "UpsertVector{{.scalar.String}}", ti.fn)
+						if !ti.makeSetVectorFail {
+							vector{{.scalar.String}}Mock.AssertCalled(t, "SetVector{{.scalar.String}}", ti.fn)
 						}
 
 						if !ti.makePushFail {
@@ -369,7 +364,7 @@ func Test_Decode_Vector{{.scalar.String}}(t *testing.T) {
 `)
 
 	die(err)
-	scalars := []hybrids.BasicTypes{
+	scalars := []hybrids.Types{
 		hybrids.Int8,
 		hybrids.Uint8,
 		hybrids.Int16,

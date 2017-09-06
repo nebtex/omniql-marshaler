@@ -436,17 +436,15 @@ func Test_Decode_VectorInt8(t *testing.T) {
 			vector                  interface{}
 			mockVector              []int8
 			shouldFail              bool
-			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
 		}{
-			{30, nil, nil, false, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
-			{25, "vector", nil, true, false, false, false, "incorrect underlying type"},
-			{70, []interface{}{"nan"}, []int8{0}, true, false, false, true, "item: incorrect underlying type"},
-			{50, []interface{}{1, 2, 3}, []int8{1, 2, 3}, true, true, false, true, "Should fails when the vector creation operation fails"},
-			{50, []interface{}{ int8(1), int8(2), int8(3)}, []int8{1, 2, 3}, true, false, true, true, "Should fails when the push operation fails"},
-			{50, []interface{}{ int8(1), int8(2), int8(3)}, []int8{1, 2, 3}, false, false, false, true, "Valid input, all should be ok"},
+			{30, nil, nil, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
+			{25, "vector", nil, true, false, false, "incorrect underlying type"},
+			{70, []interface{}{"nan"}, []int8{0}, true, false, true, "item: incorrect underlying type"},
+			{50, []interface{}{ int8(1), int8(2), int8(3)}, []int8{1, 2, 3}, true, true, true, "Should fails when the push operation fails"},
+			{50, []interface{}{ int8(1), int8(2), int8(3)}, []int8{1, 2, 3}, false, false, true, "Valid input, all should be ok"},
 
 		}
 
@@ -455,7 +453,7 @@ func Test_Decode_VectorInt8(t *testing.T) {
 		for _, ti := range table {
 			Convey(fmt.Sprintf("Test: %s", ti.name), func() {
 
-				int8Mock := &mocks.VectorInt8WriterBase{}
+				int8Mock := &mocks.VectorInt8Writer{}
 				for _, item := range ti.mockVector {
 					callItem := int8Mock.On("PushInt8", item)
 					if ti.makePushFail {
@@ -465,18 +463,7 @@ func Test_Decode_VectorInt8(t *testing.T) {
 					}
 				}
 
-				vectorInt8Mock := &mocks.VectorInt8WriterAccessor{}
-
-				call := vectorInt8Mock.On("SetVectorInt8", ti.fn)
-				if ti.makeSetVectorFail {
-					call.Return(nil, fmt.Errorf("SetVectorInt8 failed"))
-				} else {
-					call.Return(int8Mock, nil)
-				}
-
-
-
-				err := d.decodeVectorInt8("x.path.vector", ti.vector, ti.fn, vectorInt8Mock)
+				err := d.decodeVectorInt8("x.path.vector", ti.vector, ti.fn, int8Mock)
 				if ti.shouldFail {
 					t.Log(err)
 					So(err, ShouldNotBeNil)
@@ -488,10 +475,6 @@ func Test_Decode_VectorInt8(t *testing.T) {
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeSetVectorFail {
-							vectorInt8Mock.AssertCalled(t, "SetVectorInt8", ti.fn)
-						}
-
 						if !ti.makePushFail {
 							for _, item := range ti.mockVector {
 								int8Mock.AssertCalled(t, "PushInt8", item)
@@ -514,17 +497,15 @@ func Test_Decode_VectorUint8(t *testing.T) {
 			vector                  interface{}
 			mockVector              []uint8
 			shouldFail              bool
-			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
 		}{
-			{30, nil, nil, false, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
-			{25, "vector", nil, true, false, false, false, "incorrect underlying type"},
-			{70, []interface{}{"nan"}, []uint8{0}, true, false, false, true, "item: incorrect underlying type"},
-			{50, []interface{}{1, 2, 3}, []uint8{1, 2, 3}, true, true, false, true, "Should fails when the vector creation operation fails"},
-			{50, []interface{}{ uint8(1), uint8(2), uint8(3)}, []uint8{1, 2, 3}, true, false, true, true, "Should fails when the push operation fails"},
-			{50, []interface{}{ uint8(1), uint8(2), uint8(3)}, []uint8{1, 2, 3}, false, false, false, true, "Valid input, all should be ok"},
+			{30, nil, nil, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
+			{25, "vector", nil, true, false, false, "incorrect underlying type"},
+			{70, []interface{}{"nan"}, []uint8{0}, true, false, true, "item: incorrect underlying type"},
+			{50, []interface{}{ uint8(1), uint8(2), uint8(3)}, []uint8{1, 2, 3}, true, true, true, "Should fails when the push operation fails"},
+			{50, []interface{}{ uint8(1), uint8(2), uint8(3)}, []uint8{1, 2, 3}, false, false, true, "Valid input, all should be ok"},
 
 		}
 
@@ -533,7 +514,7 @@ func Test_Decode_VectorUint8(t *testing.T) {
 		for _, ti := range table {
 			Convey(fmt.Sprintf("Test: %s", ti.name), func() {
 
-				uint8Mock := &mocks.VectorUint8WriterBase{}
+				uint8Mock := &mocks.VectorUint8Writer{}
 				for _, item := range ti.mockVector {
 					callItem := uint8Mock.On("PushUint8", item)
 					if ti.makePushFail {
@@ -543,18 +524,7 @@ func Test_Decode_VectorUint8(t *testing.T) {
 					}
 				}
 
-				vectorUint8Mock := &mocks.VectorUint8WriterAccessor{}
-
-				call := vectorUint8Mock.On("SetVectorUint8", ti.fn)
-				if ti.makeSetVectorFail {
-					call.Return(nil, fmt.Errorf("SetVectorUint8 failed"))
-				} else {
-					call.Return(uint8Mock, nil)
-				}
-
-
-
-				err := d.decodeVectorUint8("x.path.vector", ti.vector, ti.fn, vectorUint8Mock)
+				err := d.decodeVectorUint8("x.path.vector", ti.vector, ti.fn, uint8Mock)
 				if ti.shouldFail {
 					t.Log(err)
 					So(err, ShouldNotBeNil)
@@ -566,10 +536,6 @@ func Test_Decode_VectorUint8(t *testing.T) {
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeSetVectorFail {
-							vectorUint8Mock.AssertCalled(t, "SetVectorUint8", ti.fn)
-						}
-
 						if !ti.makePushFail {
 							for _, item := range ti.mockVector {
 								uint8Mock.AssertCalled(t, "PushUint8", item)
@@ -592,17 +558,15 @@ func Test_Decode_VectorInt16(t *testing.T) {
 			vector                  interface{}
 			mockVector              []int16
 			shouldFail              bool
-			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
 		}{
-			{30, nil, nil, false, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
-			{25, "vector", nil, true, false, false, false, "incorrect underlying type"},
-			{70, []interface{}{"nan"}, []int16{0}, true, false, false, true, "item: incorrect underlying type"},
-			{50, []interface{}{1, 2, 3}, []int16{1, 2, 3}, true, true, false, true, "Should fails when the vector creation operation fails"},
-			{50, []interface{}{ int16(1), int16(2), int16(3)}, []int16{1, 2, 3}, true, false, true, true, "Should fails when the push operation fails"},
-			{50, []interface{}{ int16(1), int16(2), int16(3)}, []int16{1, 2, 3}, false, false, false, true, "Valid input, all should be ok"},
+			{30, nil, nil, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
+			{25, "vector", nil, true, false, false, "incorrect underlying type"},
+			{70, []interface{}{"nan"}, []int16{0}, true, false, true, "item: incorrect underlying type"},
+			{50, []interface{}{ int16(1), int16(2), int16(3)}, []int16{1, 2, 3}, true, true, true, "Should fails when the push operation fails"},
+			{50, []interface{}{ int16(1), int16(2), int16(3)}, []int16{1, 2, 3}, false, false, true, "Valid input, all should be ok"},
 
 		}
 
@@ -611,7 +575,7 @@ func Test_Decode_VectorInt16(t *testing.T) {
 		for _, ti := range table {
 			Convey(fmt.Sprintf("Test: %s", ti.name), func() {
 
-				int16Mock := &mocks.VectorInt16WriterBase{}
+				int16Mock := &mocks.VectorInt16Writer{}
 				for _, item := range ti.mockVector {
 					callItem := int16Mock.On("PushInt16", item)
 					if ti.makePushFail {
@@ -621,18 +585,7 @@ func Test_Decode_VectorInt16(t *testing.T) {
 					}
 				}
 
-				vectorInt16Mock := &mocks.VectorInt16WriterAccessor{}
-
-				call := vectorInt16Mock.On("SetVectorInt16", ti.fn)
-				if ti.makeSetVectorFail {
-					call.Return(nil, fmt.Errorf("SetVectorInt16 failed"))
-				} else {
-					call.Return(int16Mock, nil)
-				}
-
-
-
-				err := d.decodeVectorInt16("x.path.vector", ti.vector, ti.fn, vectorInt16Mock)
+				err := d.decodeVectorInt16("x.path.vector", ti.vector, ti.fn, int16Mock)
 				if ti.shouldFail {
 					t.Log(err)
 					So(err, ShouldNotBeNil)
@@ -644,10 +597,6 @@ func Test_Decode_VectorInt16(t *testing.T) {
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeSetVectorFail {
-							vectorInt16Mock.AssertCalled(t, "SetVectorInt16", ti.fn)
-						}
-
 						if !ti.makePushFail {
 							for _, item := range ti.mockVector {
 								int16Mock.AssertCalled(t, "PushInt16", item)
@@ -670,17 +619,15 @@ func Test_Decode_VectorUint16(t *testing.T) {
 			vector                  interface{}
 			mockVector              []uint16
 			shouldFail              bool
-			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
 		}{
-			{30, nil, nil, false, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
-			{25, "vector", nil, true, false, false, false, "incorrect underlying type"},
-			{70, []interface{}{"nan"}, []uint16{0}, true, false, false, true, "item: incorrect underlying type"},
-			{50, []interface{}{1, 2, 3}, []uint16{1, 2, 3}, true, true, false, true, "Should fails when the vector creation operation fails"},
-			{50, []interface{}{ uint16(1), uint16(2), uint16(3)}, []uint16{1, 2, 3}, true, false, true, true, "Should fails when the push operation fails"},
-			{50, []interface{}{ uint16(1), uint16(2), uint16(3)}, []uint16{1, 2, 3}, false, false, false, true, "Valid input, all should be ok"},
+			{30, nil, nil, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
+			{25, "vector", nil, true, false, false, "incorrect underlying type"},
+			{70, []interface{}{"nan"}, []uint16{0}, true, false, true, "item: incorrect underlying type"},
+			{50, []interface{}{ uint16(1), uint16(2), uint16(3)}, []uint16{1, 2, 3}, true, true, true, "Should fails when the push operation fails"},
+			{50, []interface{}{ uint16(1), uint16(2), uint16(3)}, []uint16{1, 2, 3}, false, false, true, "Valid input, all should be ok"},
 
 		}
 
@@ -689,7 +636,7 @@ func Test_Decode_VectorUint16(t *testing.T) {
 		for _, ti := range table {
 			Convey(fmt.Sprintf("Test: %s", ti.name), func() {
 
-				uint16Mock := &mocks.VectorUint16WriterBase{}
+				uint16Mock := &mocks.VectorUint16Writer{}
 				for _, item := range ti.mockVector {
 					callItem := uint16Mock.On("PushUint16", item)
 					if ti.makePushFail {
@@ -699,18 +646,7 @@ func Test_Decode_VectorUint16(t *testing.T) {
 					}
 				}
 
-				vectorUint16Mock := &mocks.VectorUint16WriterAccessor{}
-
-				call := vectorUint16Mock.On("SetVectorUint16", ti.fn)
-				if ti.makeSetVectorFail {
-					call.Return(nil, fmt.Errorf("SetVectorUint16 failed"))
-				} else {
-					call.Return(uint16Mock, nil)
-				}
-
-
-
-				err := d.decodeVectorUint16("x.path.vector", ti.vector, ti.fn, vectorUint16Mock)
+				err := d.decodeVectorUint16("x.path.vector", ti.vector, ti.fn, uint16Mock)
 				if ti.shouldFail {
 					t.Log(err)
 					So(err, ShouldNotBeNil)
@@ -722,10 +658,6 @@ func Test_Decode_VectorUint16(t *testing.T) {
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeSetVectorFail {
-							vectorUint16Mock.AssertCalled(t, "SetVectorUint16", ti.fn)
-						}
-
 						if !ti.makePushFail {
 							for _, item := range ti.mockVector {
 								uint16Mock.AssertCalled(t, "PushUint16", item)
@@ -748,17 +680,15 @@ func Test_Decode_VectorInt32(t *testing.T) {
 			vector                  interface{}
 			mockVector              []int32
 			shouldFail              bool
-			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
 		}{
-			{30, nil, nil, false, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
-			{25, "vector", nil, true, false, false, false, "incorrect underlying type"},
-			{70, []interface{}{"nan"}, []int32{0}, true, false, false, true, "item: incorrect underlying type"},
-			{50, []interface{}{1, 2, 3}, []int32{1, 2, 3}, true, true, false, true, "Should fails when the vector creation operation fails"},
-			{50, []interface{}{ int32(1), int32(2), int32(3)}, []int32{1, 2, 3}, true, false, true, true, "Should fails when the push operation fails"},
-			{50, []interface{}{ int32(1), int32(2), int32(3)}, []int32{1, 2, 3}, false, false, false, true, "Valid input, all should be ok"},
+			{30, nil, nil, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
+			{25, "vector", nil, true, false, false, "incorrect underlying type"},
+			{70, []interface{}{"nan"}, []int32{0}, true, false, true, "item: incorrect underlying type"},
+			{50, []interface{}{ int32(1), int32(2), int32(3)}, []int32{1, 2, 3}, true, true, true, "Should fails when the push operation fails"},
+			{50, []interface{}{ int32(1), int32(2), int32(3)}, []int32{1, 2, 3}, false, false, true, "Valid input, all should be ok"},
 
 		}
 
@@ -767,7 +697,7 @@ func Test_Decode_VectorInt32(t *testing.T) {
 		for _, ti := range table {
 			Convey(fmt.Sprintf("Test: %s", ti.name), func() {
 
-				int32Mock := &mocks.VectorInt32WriterBase{}
+				int32Mock := &mocks.VectorInt32Writer{}
 				for _, item := range ti.mockVector {
 					callItem := int32Mock.On("PushInt32", item)
 					if ti.makePushFail {
@@ -777,18 +707,7 @@ func Test_Decode_VectorInt32(t *testing.T) {
 					}
 				}
 
-				vectorInt32Mock := &mocks.VectorInt32WriterAccessor{}
-
-				call := vectorInt32Mock.On("SetVectorInt32", ti.fn)
-				if ti.makeSetVectorFail {
-					call.Return(nil, fmt.Errorf("SetVectorInt32 failed"))
-				} else {
-					call.Return(int32Mock, nil)
-				}
-
-
-
-				err := d.decodeVectorInt32("x.path.vector", ti.vector, ti.fn, vectorInt32Mock)
+				err := d.decodeVectorInt32("x.path.vector", ti.vector, ti.fn, int32Mock)
 				if ti.shouldFail {
 					t.Log(err)
 					So(err, ShouldNotBeNil)
@@ -800,10 +719,6 @@ func Test_Decode_VectorInt32(t *testing.T) {
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeSetVectorFail {
-							vectorInt32Mock.AssertCalled(t, "SetVectorInt32", ti.fn)
-						}
-
 						if !ti.makePushFail {
 							for _, item := range ti.mockVector {
 								int32Mock.AssertCalled(t, "PushInt32", item)
@@ -826,17 +741,15 @@ func Test_Decode_VectorUint32(t *testing.T) {
 			vector                  interface{}
 			mockVector              []uint32
 			shouldFail              bool
-			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
 		}{
-			{30, nil, nil, false, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
-			{25, "vector", nil, true, false, false, false, "incorrect underlying type"},
-			{70, []interface{}{"nan"}, []uint32{0}, true, false, false, true, "item: incorrect underlying type"},
-			{50, []interface{}{1, 2, 3}, []uint32{1, 2, 3}, true, true, false, true, "Should fails when the vector creation operation fails"},
-			{50, []interface{}{ uint32(1), uint32(2), uint32(3)}, []uint32{1, 2, 3}, true, false, true, true, "Should fails when the push operation fails"},
-			{50, []interface{}{ uint32(1), uint32(2), uint32(3)}, []uint32{1, 2, 3}, false, false, false, true, "Valid input, all should be ok"},
+			{30, nil, nil, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
+			{25, "vector", nil, true, false, false, "incorrect underlying type"},
+			{70, []interface{}{"nan"}, []uint32{0}, true, false, true, "item: incorrect underlying type"},
+			{50, []interface{}{ uint32(1), uint32(2), uint32(3)}, []uint32{1, 2, 3}, true, true, true, "Should fails when the push operation fails"},
+			{50, []interface{}{ uint32(1), uint32(2), uint32(3)}, []uint32{1, 2, 3}, false, false, true, "Valid input, all should be ok"},
 
 		}
 
@@ -845,7 +758,7 @@ func Test_Decode_VectorUint32(t *testing.T) {
 		for _, ti := range table {
 			Convey(fmt.Sprintf("Test: %s", ti.name), func() {
 
-				uint32Mock := &mocks.VectorUint32WriterBase{}
+				uint32Mock := &mocks.VectorUint32Writer{}
 				for _, item := range ti.mockVector {
 					callItem := uint32Mock.On("PushUint32", item)
 					if ti.makePushFail {
@@ -855,18 +768,7 @@ func Test_Decode_VectorUint32(t *testing.T) {
 					}
 				}
 
-				vectorUint32Mock := &mocks.VectorUint32WriterAccessor{}
-
-				call := vectorUint32Mock.On("SetVectorUint32", ti.fn)
-				if ti.makeSetVectorFail {
-					call.Return(nil, fmt.Errorf("SetVectorUint32 failed"))
-				} else {
-					call.Return(uint32Mock, nil)
-				}
-
-
-
-				err := d.decodeVectorUint32("x.path.vector", ti.vector, ti.fn, vectorUint32Mock)
+				err := d.decodeVectorUint32("x.path.vector", ti.vector, ti.fn, uint32Mock)
 				if ti.shouldFail {
 					t.Log(err)
 					So(err, ShouldNotBeNil)
@@ -878,10 +780,6 @@ func Test_Decode_VectorUint32(t *testing.T) {
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeSetVectorFail {
-							vectorUint32Mock.AssertCalled(t, "SetVectorUint32", ti.fn)
-						}
-
 						if !ti.makePushFail {
 							for _, item := range ti.mockVector {
 								uint32Mock.AssertCalled(t, "PushUint32", item)
@@ -904,17 +802,15 @@ func Test_Decode_VectorFloat32(t *testing.T) {
 			vector                  interface{}
 			mockVector              []float32
 			shouldFail              bool
-			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
 		}{
-			{30, nil, nil, false, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
-			{25, "vector", nil, true, false, false, false, "incorrect underlying type"},
-			{70, []interface{}{"nan"}, []float32{0}, true, false, false, true, "item: incorrect underlying type"},
-			{50, []interface{}{1, 2, 3}, []float32{1, 2, 3}, true, true, false, true, "Should fails when the vector creation operation fails"},
-			{50, []interface{}{ float32(1), float32(2), float32(3)}, []float32{1, 2, 3}, true, false, true, true, "Should fails when the push operation fails"},
-			{50, []interface{}{ float32(1), float32(2), float32(3)}, []float32{1, 2, 3}, false, false, false, true, "Valid input, all should be ok"},
+			{30, nil, nil, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
+			{25, "vector", nil, true, false, false, "incorrect underlying type"},
+			{70, []interface{}{"nan"}, []float32{0}, true, false, true, "item: incorrect underlying type"},
+			{50, []interface{}{ float32(1), float32(2), float32(3)}, []float32{1, 2, 3}, true, true, true, "Should fails when the push operation fails"},
+			{50, []interface{}{ float32(1), float32(2), float32(3)}, []float32{1, 2, 3}, false, false, true, "Valid input, all should be ok"},
 
 		}
 
@@ -923,7 +819,7 @@ func Test_Decode_VectorFloat32(t *testing.T) {
 		for _, ti := range table {
 			Convey(fmt.Sprintf("Test: %s", ti.name), func() {
 
-				float32Mock := &mocks.VectorFloat32WriterBase{}
+				float32Mock := &mocks.VectorFloat32Writer{}
 				for _, item := range ti.mockVector {
 					callItem := float32Mock.On("PushFloat32", item)
 					if ti.makePushFail {
@@ -933,18 +829,7 @@ func Test_Decode_VectorFloat32(t *testing.T) {
 					}
 				}
 
-				vectorFloat32Mock := &mocks.VectorFloat32WriterAccessor{}
-
-				call := vectorFloat32Mock.On("SetVectorFloat32", ti.fn)
-				if ti.makeSetVectorFail {
-					call.Return(nil, fmt.Errorf("SetVectorFloat32 failed"))
-				} else {
-					call.Return(float32Mock, nil)
-				}
-
-
-
-				err := d.decodeVectorFloat32("x.path.vector", ti.vector, ti.fn, vectorFloat32Mock)
+				err := d.decodeVectorFloat32("x.path.vector", ti.vector, ti.fn, float32Mock)
 				if ti.shouldFail {
 					t.Log(err)
 					So(err, ShouldNotBeNil)
@@ -956,10 +841,6 @@ func Test_Decode_VectorFloat32(t *testing.T) {
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeSetVectorFail {
-							vectorFloat32Mock.AssertCalled(t, "SetVectorFloat32", ti.fn)
-						}
-
 						if !ti.makePushFail {
 							for _, item := range ti.mockVector {
 								float32Mock.AssertCalled(t, "PushFloat32", item)
@@ -982,17 +863,15 @@ func Test_Decode_VectorFloat64(t *testing.T) {
 			vector                  interface{}
 			mockVector              []float64
 			shouldFail              bool
-			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
 		}{
-			{30, nil, nil, false, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
-			{25, "vector", nil, true, false, false, false, "incorrect underlying type"},
-			{70, []interface{}{"nan"}, []float64{0}, true, false, false, true, "item: incorrect underlying type"},
-			{50, []interface{}{1, 2, 3}, []float64{1, 2, 3}, true, true, false, true, "Should fails when the vector creation operation fails"},
-			{50, []interface{}{ float64(1), float64(2), float64(3)}, []float64{1, 2, 3}, true, false, true, true, "Should fails when the push operation fails"},
-			{50, []interface{}{ float64(1), float64(2), float64(3)}, []float64{1, 2, 3}, false, false, false, true, "Valid input, all should be ok"},
+			{30, nil, nil, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
+			{25, "vector", nil, true, false, false, "incorrect underlying type"},
+			{70, []interface{}{"nan"}, []float64{0}, true, false, true, "item: incorrect underlying type"},
+			{50, []interface{}{ float64(1), float64(2), float64(3)}, []float64{1, 2, 3}, true, true, true, "Should fails when the push operation fails"},
+			{50, []interface{}{ float64(1), float64(2), float64(3)}, []float64{1, 2, 3}, false, false, true, "Valid input, all should be ok"},
 
 		}
 
@@ -1001,7 +880,7 @@ func Test_Decode_VectorFloat64(t *testing.T) {
 		for _, ti := range table {
 			Convey(fmt.Sprintf("Test: %s", ti.name), func() {
 
-				float64Mock := &mocks.VectorFloat64WriterBase{}
+				float64Mock := &mocks.VectorFloat64Writer{}
 				for _, item := range ti.mockVector {
 					callItem := float64Mock.On("PushFloat64", item)
 					if ti.makePushFail {
@@ -1011,18 +890,7 @@ func Test_Decode_VectorFloat64(t *testing.T) {
 					}
 				}
 
-				vectorFloat64Mock := &mocks.VectorFloat64WriterAccessor{}
-
-				call := vectorFloat64Mock.On("SetVectorFloat64", ti.fn)
-				if ti.makeSetVectorFail {
-					call.Return(nil, fmt.Errorf("SetVectorFloat64 failed"))
-				} else {
-					call.Return(float64Mock, nil)
-				}
-
-
-
-				err := d.decodeVectorFloat64("x.path.vector", ti.vector, ti.fn, vectorFloat64Mock)
+				err := d.decodeVectorFloat64("x.path.vector", ti.vector, ti.fn, float64Mock)
 				if ti.shouldFail {
 					t.Log(err)
 					So(err, ShouldNotBeNil)
@@ -1034,10 +902,6 @@ func Test_Decode_VectorFloat64(t *testing.T) {
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeSetVectorFail {
-							vectorFloat64Mock.AssertCalled(t, "SetVectorFloat64", ti.fn)
-						}
-
 						if !ti.makePushFail {
 							for _, item := range ti.mockVector {
 								float64Mock.AssertCalled(t, "PushFloat64", item)
@@ -1060,17 +924,15 @@ func Test_Decode_VectorInt64(t *testing.T) {
 			vector                  interface{}
 			mockVector              []int64
 			shouldFail              bool
-			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
 		}{
-			{30, nil, nil, false, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
-			{25, "vector", nil, true, false, false, false, "incorrect underlying type"},
-			{70, []interface{}{"nan"}, []int64{0}, true, false, false, true, "item: incorrect underlying type"},
-			{50, []interface{}{1, 2, 3}, []int64{1, 2, 3}, true, true, false, true, "Should fails when the vector creation operation fails"},
-			{50, []interface{}{ int64(1), int64(2), int64(3)}, []int64{1, 2, 3}, true, false, true, true, "Should fails when the push operation fails"},
-			{50, []interface{}{ int64(1), int64(2), int64(3)}, []int64{1, 2, 3}, false, false, false, true, "Valid input, all should be ok"},
+			{30, nil, nil, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
+			{25, "vector", nil, true, false, false, "incorrect underlying type"},
+			{70, []interface{}{"nan"}, []int64{0}, true, false, true, "item: incorrect underlying type"},
+			{50, []interface{}{ int64(1), int64(2), int64(3)}, []int64{1, 2, 3}, true, true, true, "Should fails when the push operation fails"},
+			{50, []interface{}{ int64(1), int64(2), int64(3)}, []int64{1, 2, 3}, false, false, true, "Valid input, all should be ok"},
 
 		}
 
@@ -1079,7 +941,7 @@ func Test_Decode_VectorInt64(t *testing.T) {
 		for _, ti := range table {
 			Convey(fmt.Sprintf("Test: %s", ti.name), func() {
 
-				int64Mock := &mocks.VectorInt64WriterBase{}
+				int64Mock := &mocks.VectorInt64Writer{}
 				for _, item := range ti.mockVector {
 					callItem := int64Mock.On("PushInt64", item)
 					if ti.makePushFail {
@@ -1089,18 +951,7 @@ func Test_Decode_VectorInt64(t *testing.T) {
 					}
 				}
 
-				vectorInt64Mock := &mocks.VectorInt64WriterAccessor{}
-
-				call := vectorInt64Mock.On("SetVectorInt64", ti.fn)
-				if ti.makeSetVectorFail {
-					call.Return(nil, fmt.Errorf("SetVectorInt64 failed"))
-				} else {
-					call.Return(int64Mock, nil)
-				}
-
-
-
-				err := d.decodeVectorInt64("x.path.vector", ti.vector, ti.fn, vectorInt64Mock)
+				err := d.decodeVectorInt64("x.path.vector", ti.vector, ti.fn, int64Mock)
 				if ti.shouldFail {
 					t.Log(err)
 					So(err, ShouldNotBeNil)
@@ -1112,10 +963,6 @@ func Test_Decode_VectorInt64(t *testing.T) {
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeSetVectorFail {
-							vectorInt64Mock.AssertCalled(t, "SetVectorInt64", ti.fn)
-						}
-
 						if !ti.makePushFail {
 							for _, item := range ti.mockVector {
 								int64Mock.AssertCalled(t, "PushInt64", item)
@@ -1138,17 +985,15 @@ func Test_Decode_VectorUint64(t *testing.T) {
 			vector                  interface{}
 			mockVector              []uint64
 			shouldFail              bool
-			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
 		}{
-			{30, nil, nil, false, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
-			{25, "vector", nil, true, false, false, false, "incorrect underlying type"},
-			{70, []interface{}{"nan"}, []uint64{0}, true, false, false, true, "item: incorrect underlying type"},
-			{50, []interface{}{1, 2, 3}, []uint64{1, 2, 3}, true, true, false, true, "Should fails when the vector creation operation fails"},
-			{50, []interface{}{ uint64(1), uint64(2), uint64(3)}, []uint64{1, 2, 3}, true, false, true, true, "Should fails when the push operation fails"},
-			{50, []interface{}{ uint64(1), uint64(2), uint64(3)}, []uint64{1, 2, 3}, false, false, false, true, "Valid input, all should be ok"},
+			{30, nil, nil, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
+			{25, "vector", nil, true, false, false, "incorrect underlying type"},
+			{70, []interface{}{"nan"}, []uint64{0}, true, false, true, "item: incorrect underlying type"},
+			{50, []interface{}{ uint64(1), uint64(2), uint64(3)}, []uint64{1, 2, 3}, true, true, true, "Should fails when the push operation fails"},
+			{50, []interface{}{ uint64(1), uint64(2), uint64(3)}, []uint64{1, 2, 3}, false, false, true, "Valid input, all should be ok"},
 
 		}
 
@@ -1157,7 +1002,7 @@ func Test_Decode_VectorUint64(t *testing.T) {
 		for _, ti := range table {
 			Convey(fmt.Sprintf("Test: %s", ti.name), func() {
 
-				uint64Mock := &mocks.VectorUint64WriterBase{}
+				uint64Mock := &mocks.VectorUint64Writer{}
 				for _, item := range ti.mockVector {
 					callItem := uint64Mock.On("PushUint64", item)
 					if ti.makePushFail {
@@ -1167,18 +1012,7 @@ func Test_Decode_VectorUint64(t *testing.T) {
 					}
 				}
 
-				vectorUint64Mock := &mocks.VectorUint64WriterAccessor{}
-
-				call := vectorUint64Mock.On("SetVectorUint64", ti.fn)
-				if ti.makeSetVectorFail {
-					call.Return(nil, fmt.Errorf("SetVectorUint64 failed"))
-				} else {
-					call.Return(uint64Mock, nil)
-				}
-
-
-
-				err := d.decodeVectorUint64("x.path.vector", ti.vector, ti.fn, vectorUint64Mock)
+				err := d.decodeVectorUint64("x.path.vector", ti.vector, ti.fn, uint64Mock)
 				if ti.shouldFail {
 					t.Log(err)
 					So(err, ShouldNotBeNil)
@@ -1190,10 +1024,6 @@ func Test_Decode_VectorUint64(t *testing.T) {
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeSetVectorFail {
-							vectorUint64Mock.AssertCalled(t, "SetVectorUint64", ti.fn)
-						}
-
 						if !ti.makePushFail {
 							for _, item := range ti.mockVector {
 								uint64Mock.AssertCalled(t, "PushUint64", item)

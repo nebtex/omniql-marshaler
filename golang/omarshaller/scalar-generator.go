@@ -278,17 +278,15 @@ func Test_Decode_Vector{{.scalar.String}}(t *testing.T) {
 			vector                  interface{}
 			mockVector              []{{.scalar.NativeType}}
 			shouldFail              bool
-			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
 		}{
-			{30, nil, nil, false, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
-			{25, "vector", nil, true, false, false, false, "incorrect underlying type"},
-			{70, []interface{}{"nan"}, []{{.scalar.NativeType}}{0}, true, false, false, true, "item: incorrect underlying type"},
-			{50, []interface{}{1, 2, 3}, []{{.scalar.NativeType}}{1, 2, 3}, true, true, false, true, "Should fails when the vector creation operation fails"},
-			{50, []interface{}{ {{.scalar.NativeType}}(1), {{.scalar.NativeType}}(2), {{.scalar.NativeType}}(3)}, []{{.scalar.NativeType}}{1, 2, 3}, true, false, true, true, "Should fails when the push operation fails"},
-			{50, []interface{}{ {{.scalar.NativeType}}(1), {{.scalar.NativeType}}(2), {{.scalar.NativeType}}(3)}, []{{.scalar.NativeType}}{1, 2, 3}, false, false, false, true, "Valid input, all should be ok"},
+			{30, nil, nil, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
+			{25, "vector", nil, true, false, false, "incorrect underlying type"},
+			{70, []interface{}{"nan"}, []{{.scalar.NativeType}}{0}, true, false, true, "item: incorrect underlying type"},
+			{50, []interface{}{ {{.scalar.NativeType}}(1), {{.scalar.NativeType}}(2), {{.scalar.NativeType}}(3)}, []{{.scalar.NativeType}}{1, 2, 3}, true, true, true, "Should fails when the push operation fails"},
+			{50, []interface{}{ {{.scalar.NativeType}}(1), {{.scalar.NativeType}}(2), {{.scalar.NativeType}}(3)}, []{{.scalar.NativeType}}{1, 2, 3}, false, false, true, "Valid input, all should be ok"},
 
 		}
 
@@ -297,7 +295,7 @@ func Test_Decode_Vector{{.scalar.String}}(t *testing.T) {
 		for _, ti := range table {
 			Convey(fmt.Sprintf("Test: %s", ti.name), func() {
 
-				{{.scalar.NativeType}}Mock := &mocks.Vector{{.scalar.String}}WriterBase{}
+				{{.scalar.NativeType}}Mock := &mocks.Vector{{.scalar.String}}Writer{}
 				for _, item := range ti.mockVector {
 					callItem := {{.scalar.NativeType}}Mock.On("Push{{.scalar.String}}", item)
 					if ti.makePushFail {
@@ -307,18 +305,7 @@ func Test_Decode_Vector{{.scalar.String}}(t *testing.T) {
 					}
 				}
 
-				vector{{.scalar.String}}Mock := &mocks.Vector{{.scalar.String}}WriterAccessor{}
-
-				call := vector{{.scalar.String}}Mock.On("SetVector{{.scalar.String}}", ti.fn)
-				if ti.makeSetVectorFail {
-					call.Return(nil, fmt.Errorf("SetVector{{.scalar.String}} failed"))
-				} else {
-					call.Return({{.scalar.NativeType}}Mock, nil)
-				}
-
-
-
-				err := d.decodeVector{{.scalar.String}}("x.path.vector", ti.vector, ti.fn, vector{{.scalar.String}}Mock)
+				err := d.decodeVector{{.scalar.String}}("x.path.vector", ti.vector, ti.fn, {{.scalar.NativeType}}Mock)
 				if ti.shouldFail {
 					t.Log(err)
 					So(err, ShouldNotBeNil)
@@ -330,10 +317,6 @@ func Test_Decode_Vector{{.scalar.String}}(t *testing.T) {
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeSetVectorFail {
-							vector{{.scalar.String}}Mock.AssertCalled(t, "SetVector{{.scalar.String}}", ti.fn)
-						}
-
 						if !ti.makePushFail {
 							for _, item := range ti.mockVector {
 								{{.scalar.NativeType}}Mock.AssertCalled(t, "Push{{.scalar.String}}", item)

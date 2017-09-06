@@ -13,18 +13,6 @@ func (d *Decoder) decodeStruct(path string, value interface{}, oType *oreflectio
 	var fw *oreflection.FieldWrapper
 	var fo *oreflection.OType
 
-	if value == nil {
-		//Remember a struct are superset of scalar so it never should have a nil value
-		err = &DecodeError{
-			Path:        path,
-			Application: d.application,
-			OmniqlType:  oType.Id,
-			HybridType:  hybrids.Struct,
-			ErrorMsg:    fmt.Sprintf("I expected a Struct, got nil/null"),
-		}
-		return
-	}
-
 	vi, ok = value.(map[string]interface{})
 
 	if !ok {
@@ -70,7 +58,7 @@ func (d *Decoder) decodeStruct(path string, value interface{}, oType *oreflectio
 	return
 }
 
-func (d *Decoder) decodeVectorStruct(path string, value interface{}, oType *oreflection.OType, fn hybrids.FieldNumber, tw hybrids.VectorStructWriter) (err error) {
+func (d *Decoder) decodeVectorStruct(path string, value interface{}, oType *oreflection.OType, tw hybrids.VectorStructWriter) (err error) {
 	var vi []interface{}
 	var ok bool
 	var scalarWriter hybrids.ScalarWriter

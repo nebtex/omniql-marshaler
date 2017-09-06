@@ -5,6 +5,7 @@ import (
 	"github.com/nebtex/hybrids/golang/hybrids"
 	"fmt"
 	"reflect"
+	"github.com/nebtex/omnibuff/tools/golang/tools/oreflection"
 )
 
 func (d *Decoder) getString(value interface{}) (str string, err error) {
@@ -104,7 +105,7 @@ func (d *Decoder) decodeByte(path string, value interface{}, fn hybrids.FieldNum
 	return
 }
 
-func (d *Decoder) decodeResourceID(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.ResourceIDWriterAccessor) (err error) {
+func (d *Decoder) decodeResourceID(path string, value interface{}, fn hybrids.FieldNumber, ot *oreflection.OType, tw hybrids.ResourceIDWriterAccessor) (err error) {
 	var str []byte
 
 	if value == nil {
@@ -118,8 +119,8 @@ func (d *Decoder) decodeResourceID(path string, value interface{}, fn hybrids.Fi
 		err = &DecodeError{
 			Path:        path,
 			Application: d.application,
-			OmniqlType:  "Byte",
-			HybridType:  hybrids.Byte,
+			OmniqlType:  ot.Id,
+			HybridType:  hybrids.ResourceID,
 			ErrorMsg:    err.Error(),
 		}
 		return
@@ -131,8 +132,8 @@ func (d *Decoder) decodeResourceID(path string, value interface{}, fn hybrids.Fi
 		err = &DecodeError{
 			Path:        path,
 			Application: d.application,
-			OmniqlType:  "Byte",
-			HybridType:  hybrids.Byte,
+			OmniqlType:  ot.Id,
+			HybridType:  hybrids.ResourceID,
 			ErrorMsg:    err.Error(),
 		}
 		return
@@ -184,7 +185,7 @@ func (d *Decoder) decodeVectorString(path string, value interface{}, tw hybrids.
 
 		if err != nil {
 			err = &DecodeError{
-				Path:        path,
+				Path:        item_path,
 				Application: d.application,
 				OmniqlType:  "Vector[String]",
 				HybridType:  hybrids.VectorString,
@@ -240,7 +241,7 @@ func (d *Decoder) decodeVectorByte(path string, value interface{}, tw hybrids.Ve
 
 		if err != nil {
 			err = &DecodeError{
-				Path:        path,
+				Path:        item_path,
 				Application: d.application,
 				OmniqlType:  "Vector[Byte]",
 				HybridType:  hybrids.VectorByte,
@@ -253,7 +254,7 @@ func (d *Decoder) decodeVectorByte(path string, value interface{}, tw hybrids.Ve
 	return
 }
 
-func (d *Decoder) decodeVectorResourceID(path string, value interface{}, tw hybrids.VectorResourceIDWriter) (err error) {
+func (d *Decoder) decodeVectorResourceID(path string, value interface{}, ot *oreflection.OType, tw hybrids.VectorResourceIDWriter) (err error) {
 	var vi []interface{}
 	var ok bool
 	var str []byte
@@ -270,7 +271,7 @@ func (d *Decoder) decodeVectorResourceID(path string, value interface{}, tw hybr
 		err = &DecodeError{
 			Path:        path,
 			Application: d.application,
-			OmniqlType:  "Vector[Resource]",
+			OmniqlType:  ot.Id,
 			HybridType:  hybrids.VectorResourceID,
 			ErrorMsg:    fmt.Sprintf("I expected a vector, got %s", reflect.ValueOf(value).Type().String()),
 		}
@@ -286,7 +287,7 @@ func (d *Decoder) decodeVectorResourceID(path string, value interface{}, tw hybr
 			err = &DecodeError{
 				Path:        item_path,
 				Application: d.application,
-				OmniqlType:  "Vector[Resource]",
+				OmniqlType:  ot.Items.Id,
 				HybridType:  hybrids.VectorResourceID,
 				ErrorMsg:    err.Error(),
 			}
@@ -296,9 +297,9 @@ func (d *Decoder) decodeVectorResourceID(path string, value interface{}, tw hybr
 
 		if err != nil {
 			err = &DecodeError{
-				Path:        path,
+				Path:        item_path,
 				Application: d.application,
-				OmniqlType:  "Vector[Resource]",
+				OmniqlType:  ot.Items.Id,
 				HybridType:  hybrids.VectorResourceID,
 				ErrorMsg:    err.Error(),
 			}

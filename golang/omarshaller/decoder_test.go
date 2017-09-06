@@ -46,7 +46,7 @@ func Test_DecoderFloat64(t *testing.T) {
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
 					So(de.Path, ShouldEqual, "x.path")
-					So(de.HybridType, ShouldEqual, "Float64")
+					So(de.HybridType, ShouldEqual, hybrids.Float64)
 					So(de.OmniqlType, ShouldEqual, "Float64")
 
 				} else {
@@ -101,7 +101,7 @@ func Test_DecoderUint64(t *testing.T) {
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
 					So(de.Path, ShouldEqual, "x.path")
-					So(de.HybridType, ShouldEqual, "Uint64")
+					So(de.HybridType, ShouldEqual, hybrids.Uint64)
 					So(de.OmniqlType, ShouldEqual, "Uint64")
 
 				} else {
@@ -156,7 +156,7 @@ func Test_DecoderInt64(t *testing.T) {
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
 					So(de.Path, ShouldEqual, "x.path")
-					So(de.HybridType, ShouldEqual, "Int64")
+					So(de.HybridType, ShouldEqual, hybrids.Int64)
 					So(de.OmniqlType, ShouldEqual, "Int64")
 
 				} else {
@@ -208,7 +208,7 @@ func Test_DecoderBoolean(t *testing.T) {
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
 					So(de.Path, ShouldEqual, "x.path")
-					So(de.HybridType, ShouldEqual, "Boolean")
+					So(de.HybridType, ShouldEqual, hybrids.Boolean)
 					So(de.OmniqlType, ShouldEqual, "Boolean")
 
 				} else {
@@ -230,17 +230,15 @@ func Test_Decode_VectorBoolean(t *testing.T) {
 			vector                  interface{}
 			mockVector              []bool
 			shouldFail              bool
-			makeSetVectorFail    bool
 			makePushFail            bool
 			shouldTryToCreateVector bool
 			name                    string
 		}{
-			{30, nil, nil, false, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
-			{25, "vector", nil, true, false, false, false, "incorrect underlying type"},
-			{70, []interface{}{nil}, []bool{}, true, false, false, true, "item: incorrect underlying type"},
-			{50, []interface{}{false, true, false}, []bool{false, true, false}, true, true, false, true, "Should fails when the vector creation operation fails"},
-			{50, []interface{}{false, true, false}, []bool{false, true, false}, true, false, true, true, "Should fails when the push operation fails"},
-			{50, []interface{}{false, true, false}, []bool{false, true, false}, false, false, false, true, "Valid input, all should be ok"},
+			{30, nil, nil, false, false, true, "null: should not fail"},
+			{25, "vector", nil, true, false, false, "incorrect underlying type"},
+			{70, []interface{}{nil}, []bool{}, true, false, true, "item: incorrect underlying type"},
+			{50, []interface{}{false, true, false}, []bool{false, true, false}, true, true, true, "Should fails when the push operation fails"},
+			{50, []interface{}{false, true, false}, []bool{false, true, false}, false, false, true, "Valid input, all should be ok"},
 
 		}
 
@@ -249,7 +247,7 @@ func Test_Decode_VectorBoolean(t *testing.T) {
 		for _, ti := range table {
 			Convey(fmt.Sprintf("Test: %s", ti.name), func() {
 
-				boolMock := &mocks.VectorBooleanWriterBase{}
+				boolMock := &mocks.VectorBooleanWriter{}
 				for _, item := range ti.mockVector {
 					callItem := boolMock.On("PushBoolean", item)
 					if ti.makePushFail {
@@ -259,30 +257,18 @@ func Test_Decode_VectorBoolean(t *testing.T) {
 					}
 				}
 
-				vectorBooleanMock := &mocks.VectorBooleanWriterAccessor{}
-
-				call := vectorBooleanMock.On("SetVectorBoolean", ti.fn)
-				if ti.makeSetVectorFail {
-					call.Return(nil, fmt.Errorf("SetVectorBoolean failed"))
-				} else {
-					call.Return(boolMock, nil)
-				}
-
-				err := d.decodeVectorBoolean("x.path.vector", ti.vector, ti.fn, vectorBooleanMock)
+				err := d.decodeVectorBoolean("x.path.vector", ti.vector, ti.fn, boolMock)
 				if ti.shouldFail {
 					t.Log(err)
 					So(err, ShouldNotBeNil)
 					de, _ := err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
-					So(de.HybridType, ShouldEqual, "VectorBoolean")
-					So(de.OmniqlType, ShouldEqual, "Vector")
+					So(de.HybridType, ShouldEqual, hybrids.VectorBoolean)
+					So(de.OmniqlType, ShouldEqual, "Vector[Boolean]")
 
 				} else {
 					So(err, ShouldBeNil)
 					if ti.shouldTryToCreateVector {
-						if !ti.makeSetVectorFail {
-							vectorBooleanMock.AssertCalled(t, "SetVectorBoolean", ti.fn)
-						}
 
 						if !ti.makePushFail {
 							for _, item := range ti.mockVector {

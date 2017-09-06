@@ -9,6 +9,8 @@ import (
 	"github.com/nebtex/omnibuff/tools/golang/tools/oreflection"
 )
 
+//go:generate go run scalar-generator.go
+
 type Decoder struct {
 	application      string
 	ResourceKindType hybrids.ResourceKindType
@@ -225,7 +227,6 @@ func (d *Decoder) decodeScalar(path string, value interface{}, fieldType hybrids
 	return
 }
 
-//go:generate go run scalar-generator.go
 
 func (d *Decoder) getFloat64(number interface{}) (value float64, err error) {
 	var ok bool
@@ -508,7 +509,7 @@ func (d *Decoder) decodeVectorBoolean(path string, value interface{}, fn hybrids
 				Path:        fmt.Sprintf("%s[%d]", path, index),
 				Application: d.application,
 				HybridType:  hybrids.VectorBoolean,
-				OmniqlType:  "Vector",
+				OmniqlType:  "Vector[Boolean]",
 				ErrorMsg:    err.Error(),
 			}
 			return

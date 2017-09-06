@@ -226,19 +226,18 @@ func Test_DecoderBoolean(t *testing.T) {
 func Test_Decode_VectorBoolean(t *testing.T) {
 	Convey("Decode VectorBoolean test", t, func() {
 		table := []struct {
-			fn                      hybrids.FieldNumber
-			vector                  interface{}
-			mockVector              []bool
-			shouldFail              bool
-			makePushFail            bool
-			shouldTryToCreateVector bool
-			name                    string
+			fn           hybrids.FieldNumber
+			vector       interface{}
+			mockVector   []bool
+			shouldFail   bool
+			makePushFail bool
+			name         string
 		}{
-			{30, nil, nil, false, false, true, "null: should not fail"},
-			{25, "vector", nil, true, false, false, "incorrect underlying type"},
-			{70, []interface{}{nil}, []bool{}, true, false, true, "item: incorrect underlying type"},
-			{50, []interface{}{false, true, false}, []bool{false, true, false}, true, true, true, "Should fails when the push operation fails"},
-			{50, []interface{}{false, true, false}, []bool{false, true, false}, false, false, true, "Valid input, all should be ok"},
+			{30, nil, nil, false, false, "null: should not fail"},
+			{25, "vector", nil, true, false, "incorrect underlying type"},
+			{70, []interface{}{nil}, []bool{}, true, false, "item: incorrect underlying type"},
+			{50, []interface{}{false, true, false}, []bool{false, true, false}, true, true, "Should fails when the push operation fails"},
+			{50, []interface{}{false, true, false}, []bool{false, true, false}, false, false, "Valid input, all should be ok"},
 
 		}
 
@@ -268,13 +267,11 @@ func Test_Decode_VectorBoolean(t *testing.T) {
 
 				} else {
 					So(err, ShouldBeNil)
-					if ti.shouldTryToCreateVector {
-
-						if !ti.makePushFail {
-							for _, item := range ti.mockVector {
-								boolMock.AssertCalled(t, "PushBoolean", item)
-							}
+					if !ti.makePushFail {
+						for _, item := range ti.mockVector {
+							boolMock.AssertCalled(t, "PushBoolean", item)
 						}
+
 					}
 				}
 			})

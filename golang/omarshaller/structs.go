@@ -32,7 +32,7 @@ func (d *Decoder) decodeStruct(path string, value interface{}, oType *oreflectio
 		if !ok {
 			//try to match snake_case
 			fw, ok = oType.FieldMap.Snake[field_name]
-			if ok {
+			if !ok {
 				//ignore field
 				continue
 			}

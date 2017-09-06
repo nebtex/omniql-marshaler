@@ -51,7 +51,7 @@ func Test_DecoderInt8(t *testing.T) {
 					de, _:= err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
 					So(de.Path, ShouldEqual, "x.path")
-					So(de.HybridType, ShouldEqual, "Int8")
+					So(de.HybridType, ShouldEqual, hybrids.Int8)
 					So(de.OmniqlType, ShouldEqual, "Int8")
 
 				} else {
@@ -111,7 +111,7 @@ func Test_DecoderUint8(t *testing.T) {
 					de, _:= err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
 					So(de.Path, ShouldEqual, "x.path")
-					So(de.HybridType, ShouldEqual, "Uint8")
+					So(de.HybridType, ShouldEqual, hybrids.Uint8)
 					So(de.OmniqlType, ShouldEqual, "Uint8")
 
 				} else {
@@ -171,7 +171,7 @@ func Test_DecoderInt16(t *testing.T) {
 					de, _:= err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
 					So(de.Path, ShouldEqual, "x.path")
-					So(de.HybridType, ShouldEqual, "Int16")
+					So(de.HybridType, ShouldEqual, hybrids.Int16)
 					So(de.OmniqlType, ShouldEqual, "Int16")
 
 				} else {
@@ -231,7 +231,7 @@ func Test_DecoderUint16(t *testing.T) {
 					de, _:= err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
 					So(de.Path, ShouldEqual, "x.path")
-					So(de.HybridType, ShouldEqual, "Uint16")
+					So(de.HybridType, ShouldEqual, hybrids.Uint16)
 					So(de.OmniqlType, ShouldEqual, "Uint16")
 
 				} else {
@@ -291,7 +291,7 @@ func Test_DecoderInt32(t *testing.T) {
 					de, _:= err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
 					So(de.Path, ShouldEqual, "x.path")
-					So(de.HybridType, ShouldEqual, "Int32")
+					So(de.HybridType, ShouldEqual, hybrids.Int32)
 					So(de.OmniqlType, ShouldEqual, "Int32")
 
 				} else {
@@ -351,7 +351,7 @@ func Test_DecoderUint32(t *testing.T) {
 					de, _:= err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
 					So(de.Path, ShouldEqual, "x.path")
-					So(de.HybridType, ShouldEqual, "Uint32")
+					So(de.HybridType, ShouldEqual, hybrids.Uint32)
 					So(de.OmniqlType, ShouldEqual, "Uint32")
 
 				} else {
@@ -411,7 +411,7 @@ func Test_DecoderFloat32(t *testing.T) {
 					de, _:= err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
 					So(de.Path, ShouldEqual, "x.path")
-					So(de.HybridType, ShouldEqual, "Float32")
+					So(de.HybridType, ShouldEqual, hybrids.Float32)
 					So(de.OmniqlType, ShouldEqual, "Float32")
 
 				} else {

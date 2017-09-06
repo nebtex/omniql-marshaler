@@ -10,7 +10,10 @@ import (
 )
 
 type Decoder struct {
-	application string
+	application      string
+	ResourceKindType hybrids.ResourceKindType
+	ResourceIDType   hybrids.ResourceIDType
+
 	//reflection  hybrids.SimpleStore
 	reflect oreflection.ReflectStore
 }

@@ -149,7 +149,7 @@ func Test_Decoder{{.scalar.String}}(t *testing.T) {
 					de, _:= err.(*DecodeError)
 					So(de.Application, ShouldEqual, "test")
 					So(de.Path, ShouldEqual, "x.path")
-					So(de.HybridType, ShouldEqual, "{{.scalar.String}}")
+					So(de.HybridType, ShouldEqual, hybrids.{{.scalar.String}})
 					So(de.OmniqlType, ShouldEqual, "{{.scalar.String}}")
 
 				} else {

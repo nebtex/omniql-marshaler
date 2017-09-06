@@ -91,7 +91,7 @@ func (d *Decoder) decodeVectorStruct(path string, value interface{}, oType *oref
 				ErrorMsg:    err.Error(),
 			}
 		}
-		err = d.decodeStruct(path+fmt.Sprintf("[%s]", index), item, oType.Items, scalarWriter)
+		err = d.decodeStruct(path+fmt.Sprintf("[%d]", index), item, oType.Items, scalarWriter)
 		if err != nil {
 			return err
 		}

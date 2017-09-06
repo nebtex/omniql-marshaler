@@ -9,7 +9,12 @@ import (
 )
 
 func (d *Decoder) getString(value interface{}) (str string, err error) {
-	str, _ = value.(string)
+	var ok bool
+	str, ok = value.(string)
+	if !ok {
+		err = fmt.Errorf("String expected, got %s", reflect.ValueOf(value).Type().String())
+		return
+	}
 	return
 }
 
@@ -24,6 +29,7 @@ func (d *Decoder) getByte(value interface{}) (b []byte, err error) {
 
 	str, ok = value.(string)
 	if !ok {
+		err = fmt.Errorf("String or []byte expected, got %s", reflect.ValueOf(value).Type().String())
 		return
 	}
 
@@ -33,13 +39,11 @@ func (d *Decoder) getByte(value interface{}) (b []byte, err error) {
 
 func (d *Decoder) decodeString(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.StringWriterAccessor) (err error) {
 	var str string
+	if value != nil {
 
-	if value == nil {
-		//Don't return an error remember that vectors (string is a vector of bytes) can be null in a table
-		return
+		str, err = d.getString(value)
+
 	}
-
-	str, err = d.getString(value)
 
 	if err != nil {
 		err = &DecodeError{
@@ -70,13 +74,9 @@ func (d *Decoder) decodeString(path string, value interface{}, fn hybrids.FieldN
 
 func (d *Decoder) decodeByte(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.ByteWriterAccessor) (err error) {
 	var str []byte
-
-	if value == nil {
-		//Don't return an error remember that vectors (string is a vector of bytes) can be null in a table
-		return
+	if value != nil {
+		str, err = d.getByte(value)
 	}
-
-	str, err = d.getByte(value)
 
 	if err != nil {
 		err = &DecodeError{
@@ -108,12 +108,10 @@ func (d *Decoder) decodeByte(path string, value interface{}, fn hybrids.FieldNum
 func (d *Decoder) decodeResourceID(path string, value interface{}, fn hybrids.FieldNumber, ot *oreflection.OType, tw hybrids.ResourceIDWriterAccessor) (err error) {
 	var str []byte
 
-	if value == nil {
-		//Don't return an error remember that vectors (string is a vector of bytes) can be null in a table
-		return
-	}
+	if value != nil {
+		str, err = d.getByte(value)
 
-	str, err = d.getByte(value)
+	}
 
 	if err != nil {
 		err = &DecodeError{
@@ -167,7 +165,7 @@ func (d *Decoder) decodeVectorString(path string, value interface{}, tw hybrids.
 	}
 
 	for index, item := range vi {
-		item_path = path + fmt.Sprintf("[%s]", index)
+		item_path = path + fmt.Sprintf("[%d]", index)
 
 		str, err = d.getString(item)
 
@@ -179,6 +177,7 @@ func (d *Decoder) decodeVectorString(path string, value interface{}, tw hybrids.
 				HybridType:  hybrids.VectorString,
 				ErrorMsg:    err.Error(),
 			}
+			return
 		}
 
 		err = tw.PushString(str)
@@ -223,8 +222,7 @@ func (d *Decoder) decodeVectorByte(path string, value interface{}, tw hybrids.Ve
 	}
 
 	for index, item := range vi {
-		item_path = path + fmt.Sprintf("[%s]", index)
-
+		item_path = path + fmt.Sprintf("[%d]", index)
 		str, err = d.getByte(item)
 
 		if err != nil {
@@ -235,6 +233,7 @@ func (d *Decoder) decodeVectorByte(path string, value interface{}, tw hybrids.Ve
 				HybridType:  hybrids.VectorByte,
 				ErrorMsg:    err.Error(),
 			}
+			return
 		}
 
 		err = tw.PushByte(str)
@@ -279,7 +278,7 @@ func (d *Decoder) decodeVectorResourceID(path string, value interface{}, ot *ore
 	}
 
 	for index, item := range vi {
-		item_path = path + fmt.Sprintf("[%s]", index)
+		item_path = path + fmt.Sprintf("[%d]", index)
 
 		str, err = d.getByte(item)
 
@@ -291,6 +290,7 @@ func (d *Decoder) decodeVectorResourceID(path string, value interface{}, ot *ore
 				HybridType:  hybrids.VectorResourceID,
 				ErrorMsg:    err.Error(),
 			}
+			return
 		}
 
 		err = tw.PushResourceID(d.ResourceKindType, d.ResourceIDType, str)

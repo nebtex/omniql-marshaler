@@ -70,7 +70,7 @@ func (d *Decoder) decodeVectorScalar(path string, value interface{}, fieldType h
 				ErrorMsg:    err.Error(),
 			}
 		}
-		err = d.decodeVectorInt8(path, value, fn, sw)
+		err = d.decodeVectorInt8(path, value, sw)
 	case hybrids.VectorUint8:
 		sw, err := tw.SetVectorUint8(fn)
 		if err != nil {
@@ -82,7 +82,7 @@ func (d *Decoder) decodeVectorScalar(path string, value interface{}, fieldType h
 				ErrorMsg:    err.Error(),
 			}
 		}
-		err = d.decodeVectorUint8(path, value, fn, sw)
+		err = d.decodeVectorUint8(path, value, sw)
 	case hybrids.VectorInt16:
 		sw, err := tw.SetVectorInt16(fn)
 		if err != nil {
@@ -94,7 +94,7 @@ func (d *Decoder) decodeVectorScalar(path string, value interface{}, fieldType h
 				ErrorMsg:    err.Error(),
 			}
 		}
-		err = d.decodeVectorInt16(path, value, fn, sw)
+		err = d.decodeVectorInt16(path, value, sw)
 	case hybrids.VectorUint16:
 		sw, err := tw.SetVectorUint16(fn)
 		if err != nil {
@@ -106,7 +106,7 @@ func (d *Decoder) decodeVectorScalar(path string, value interface{}, fieldType h
 				ErrorMsg:    err.Error(),
 			}
 		}
-		err = d.decodeVectorUint16(path, value, fn, sw)
+		err = d.decodeVectorUint16(path, value, sw)
 	case hybrids.VectorInt32:
 		sw, err := tw.SetVectorInt32(fn)
 		if err != nil {
@@ -118,7 +118,7 @@ func (d *Decoder) decodeVectorScalar(path string, value interface{}, fieldType h
 				ErrorMsg:    err.Error(),
 			}
 		}
-		err = d.decodeVectorInt32(path, value, fn, sw)
+		err = d.decodeVectorInt32(path, value, sw)
 	case hybrids.VectorUint32:
 		sw, err := tw.SetVectorUint32(fn)
 		if err != nil {
@@ -130,7 +130,7 @@ func (d *Decoder) decodeVectorScalar(path string, value interface{}, fieldType h
 				ErrorMsg:    err.Error(),
 			}
 		}
-		err = d.decodeVectorUint32(path, value, fn, sw)
+		err = d.decodeVectorUint32(path, value, sw)
 	case hybrids.VectorInt64:
 		sw, err := tw.SetVectorInt64(fn)
 		if err != nil {
@@ -142,7 +142,7 @@ func (d *Decoder) decodeVectorScalar(path string, value interface{}, fieldType h
 				ErrorMsg:    err.Error(),
 			}
 		}
-		err = d.decodeVectorInt64(path, value, fn, sw)
+		err = d.decodeVectorInt64(path, value, sw)
 	case hybrids.VectorUint64:
 		sw, err := tw.SetVectorUint64(fn)
 		if err != nil {
@@ -154,7 +154,7 @@ func (d *Decoder) decodeVectorScalar(path string, value interface{}, fieldType h
 				ErrorMsg:    err.Error(),
 			}
 		}
-		err = d.decodeVectorUint64(path, value, fn, sw)
+		err = d.decodeVectorUint64(path, value, sw)
 	case hybrids.VectorFloat32:
 		sw, err := tw.SetVectorFloat32(fn)
 		if err != nil {
@@ -166,7 +166,7 @@ func (d *Decoder) decodeVectorScalar(path string, value interface{}, fieldType h
 				ErrorMsg:    err.Error(),
 			}
 		}
-		err = d.decodeVectorFloat32(path, value, fn, sw)
+		err = d.decodeVectorFloat32(path, value, sw)
 	case hybrids.VectorFloat64:
 		sw, err := tw.SetVectorFloat64(fn)
 		if err != nil {
@@ -178,7 +178,7 @@ func (d *Decoder) decodeVectorScalar(path string, value interface{}, fieldType h
 				ErrorMsg:    err.Error(),
 			}
 		}
-		err = d.decodeVectorFloat64(path, value, fn, sw)
+		err = d.decodeVectorFloat64(path, value, sw)
 	default:
 		err = &DecodeError{
 			Path:        path,

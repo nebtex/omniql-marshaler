@@ -222,7 +222,7 @@ func (d *Decoder) decodeVectorTable(path string, value interface{}, oType *orefl
 				ErrorMsg:    err.Error(),
 			}
 		}
-		err = d.decodeTable(path+fmt.Sprintf("[%s]", index), item, oType.Items, tableWriter)
+		err = d.decodeTable(path+fmt.Sprintf("[%d]", index), item, oType.Items, tableWriter)
 		if err != nil {
 			return err
 		}

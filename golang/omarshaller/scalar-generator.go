@@ -192,7 +192,7 @@ func RenderVectorScalarDecoders(f io.Writer) {
 	var VectorScalarTemplate *template.Template
 
 	VectorScalarTemplate, err = template.New("VectorScalarTemplate").Parse(`
-func (d *Decoder) decodeVector{{.scalar.String}}(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.Vector{{.scalar.String}}Writer) (err error) {
+func (d *Decoder) decodeVector{{.scalar.String}}(path string, value interface{}, vw hybrids.Vector{{.scalar.String}}Writer) (err error) {
     var item {{.scalar.NativeType}}
     var vi []interface{}
     var ok bool
@@ -279,14 +279,13 @@ func Test_Decode_Vector{{.scalar.String}}(t *testing.T) {
 			mockVector              []{{.scalar.NativeType}}
 			shouldFail              bool
 			makePushFail            bool
-			shouldTryToCreateVector bool
 			name                    string
 		}{
-			{30, nil, nil, false, false, true, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
-			{25, "vector", nil, true, false, false, "incorrect underlying type"},
-			{70, []interface{}{"nan"}, []{{.scalar.NativeType}}{0}, true, false, true, "item: incorrect underlying type"},
-			{50, []interface{}{ {{.scalar.NativeType}}(1), {{.scalar.NativeType}}(2), {{.scalar.NativeType}}(3)}, []{{.scalar.NativeType}}{1, 2, 3}, true, true, true, "Should fails when the push operation fails"},
-			{50, []interface{}{ {{.scalar.NativeType}}(1), {{.scalar.NativeType}}(2), {{.scalar.NativeType}}(3)}, []{{.scalar.NativeType}}{1, 2, 3}, false, false, true, "Valid input, all should be ok"},
+			{30, nil, nil, false, false, "null: should create a vector but don't add items (remember vector and tables can have a null state)"},
+			{25, "vector", nil, true, false, "incorrect underlying type"},
+			{70, []interface{}{"nan"}, []{{.scalar.NativeType}}{0}, true, false, "item: incorrect underlying type"},
+			{50, []interface{}{ {{.scalar.NativeType}}(1), {{.scalar.NativeType}}(2), {{.scalar.NativeType}}(3)}, []{{.scalar.NativeType}}{1, 2, 3}, true, true, "Should fails when the push operation fails"},
+			{50, []interface{}{ {{.scalar.NativeType}}(1), {{.scalar.NativeType}}(2), {{.scalar.NativeType}}(3)}, []{{.scalar.NativeType}}{1, 2, 3}, false, false, "Valid input, all should be ok"},
 
 		}
 
@@ -305,7 +304,7 @@ func Test_Decode_Vector{{.scalar.String}}(t *testing.T) {
 					}
 				}
 
-				err := d.decodeVector{{.scalar.String}}("x.path.vector", ti.vector, ti.fn, {{.scalar.NativeType}}Mock)
+				err := d.decodeVector{{.scalar.String}}("x.path.vector", ti.vector, {{.scalar.NativeType}}Mock)
 				if ti.shouldFail {
 					t.Log(err)
 					So(err, ShouldNotBeNil)
@@ -316,12 +315,10 @@ func Test_Decode_Vector{{.scalar.String}}(t *testing.T) {
 
 				} else {
 					So(err, ShouldBeNil)
-					if ti.shouldTryToCreateVector {
 						if !ti.makePushFail {
 							for _, item := range ti.mockVector {
 								{{.scalar.NativeType}}Mock.AssertCalled(t, "Push{{.scalar.String}}", item)
 							}
-						}
 					}
 				}
 			})

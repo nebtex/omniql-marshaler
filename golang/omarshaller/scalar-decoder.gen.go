@@ -441,7 +441,7 @@ func (d *Decoder) decodeFloat32(path string, number interface{}, fn hybrids.Fiel
     return
 }
 
-func (d *Decoder) decodeVectorInt8(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorInt8Writer) (err error) {
+func (d *Decoder) decodeVectorInt8(path string, value interface{}, vw hybrids.VectorInt8Writer) (err error) {
     var item int8
     var vi []interface{}
     var ok bool
@@ -492,7 +492,7 @@ func (d *Decoder) decodeVectorInt8(path string, value interface{}, fn hybrids.Fi
     return
 }
 
-func (d *Decoder) decodeVectorUint8(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorUint8Writer) (err error) {
+func (d *Decoder) decodeVectorUint8(path string, value interface{}, vw hybrids.VectorUint8Writer) (err error) {
     var item uint8
     var vi []interface{}
     var ok bool
@@ -543,7 +543,7 @@ func (d *Decoder) decodeVectorUint8(path string, value interface{}, fn hybrids.F
     return
 }
 
-func (d *Decoder) decodeVectorInt16(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorInt16Writer) (err error) {
+func (d *Decoder) decodeVectorInt16(path string, value interface{}, vw hybrids.VectorInt16Writer) (err error) {
     var item int16
     var vi []interface{}
     var ok bool
@@ -594,7 +594,7 @@ func (d *Decoder) decodeVectorInt16(path string, value interface{}, fn hybrids.F
     return
 }
 
-func (d *Decoder) decodeVectorUint16(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorUint16Writer) (err error) {
+func (d *Decoder) decodeVectorUint16(path string, value interface{}, vw hybrids.VectorUint16Writer) (err error) {
     var item uint16
     var vi []interface{}
     var ok bool
@@ -645,7 +645,7 @@ func (d *Decoder) decodeVectorUint16(path string, value interface{}, fn hybrids.
     return
 }
 
-func (d *Decoder) decodeVectorInt32(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorInt32Writer) (err error) {
+func (d *Decoder) decodeVectorInt32(path string, value interface{}, vw hybrids.VectorInt32Writer) (err error) {
     var item int32
     var vi []interface{}
     var ok bool
@@ -696,7 +696,7 @@ func (d *Decoder) decodeVectorInt32(path string, value interface{}, fn hybrids.F
     return
 }
 
-func (d *Decoder) decodeVectorUint32(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorUint32Writer) (err error) {
+func (d *Decoder) decodeVectorUint32(path string, value interface{}, vw hybrids.VectorUint32Writer) (err error) {
     var item uint32
     var vi []interface{}
     var ok bool
@@ -747,7 +747,7 @@ func (d *Decoder) decodeVectorUint32(path string, value interface{}, fn hybrids.
     return
 }
 
-func (d *Decoder) decodeVectorFloat32(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorFloat32Writer) (err error) {
+func (d *Decoder) decodeVectorFloat32(path string, value interface{}, vw hybrids.VectorFloat32Writer) (err error) {
     var item float32
     var vi []interface{}
     var ok bool
@@ -798,7 +798,7 @@ func (d *Decoder) decodeVectorFloat32(path string, value interface{}, fn hybrids
     return
 }
 
-func (d *Decoder) decodeVectorFloat64(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorFloat64Writer) (err error) {
+func (d *Decoder) decodeVectorFloat64(path string, value interface{}, vw hybrids.VectorFloat64Writer) (err error) {
     var item float64
     var vi []interface{}
     var ok bool
@@ -849,7 +849,7 @@ func (d *Decoder) decodeVectorFloat64(path string, value interface{}, fn hybrids
     return
 }
 
-func (d *Decoder) decodeVectorInt64(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorInt64Writer) (err error) {
+func (d *Decoder) decodeVectorInt64(path string, value interface{}, vw hybrids.VectorInt64Writer) (err error) {
     var item int64
     var vi []interface{}
     var ok bool
@@ -900,7 +900,7 @@ func (d *Decoder) decodeVectorInt64(path string, value interface{}, fn hybrids.F
     return
 }
 
-func (d *Decoder) decodeVectorUint64(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorUint64Writer) (err error) {
+func (d *Decoder) decodeVectorUint64(path string, value interface{}, vw hybrids.VectorUint64Writer) (err error) {
     var item uint64
     var vi []interface{}
     var ok bool

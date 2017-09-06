@@ -192,42 +192,29 @@ func RenderVectorScalarDecoders(f io.Writer) {
 	var VectorScalarTemplate *template.Template
 
 	VectorScalarTemplate, err = template.New("VectorScalarTemplate").Parse(`
-func (d *Decoder) decodeVector{{.scalar.String}}(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.Vector{{.scalar.String}}WriterAccessor) (err error) {
-    var vector hybrids.Vector{{.scalar.String}}Writer
+func (d *Decoder) decodeVector{{.scalar.String}}(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.Vector{{.scalar.String}}Writer) (err error) {
     var item {{.scalar.NativeType}}
     var vi []interface{}
     var ok bool
 
-	if value!=nil{
-        vi, ok = value.([]interface{})
-
-        if !ok{
-            err = &DecodeError{
-                Path:        path,
-                Application: d.application,
-                HybridType:  hybrids.Vector{{.scalar.String}},
-                OmniqlType:  "Vector[{{.scalar.String}}]",
-                ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
-        }
-        return
-       }
+    if value == nil {
+		//Don't return an error remember that vector  can be null in a table
+		return
 	}
 
-    vector, err = tw.SetVector{{.scalar.String}}(fn)
+	vi, ok = value.([]interface{})
 
-    if err != nil {
-       err = &DecodeError{
-           Path:        path,
-           Application: d.application,
-           HybridType:  hybrids.Vector{{.scalar.String}},
-           OmniqlType:  "Vector[{{.scalar.String}}]",
-           ErrorMsg:    err.Error(),
-       }
-       return
+	if !ok{
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			HybridType:  hybrids.Vector{{.scalar.String}},
+			OmniqlType:  "Vector[{{.scalar.String}}]",
+			ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
+        }
+     return
     }
-    if value==nil{
-       return
-    }
+
 
     for index, v := range vi {
         item, err = d.get{{.scalar.String}}(v)
@@ -241,7 +228,7 @@ func (d *Decoder) decodeVector{{.scalar.String}}(path string, value interface{},
             }
             return
         }
-        err = vector.Push{{.scalar.String}}(item)
+        err = vw.Push{{.scalar.String}}(item)
         if err!=nil{
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),

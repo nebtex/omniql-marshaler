@@ -441,42 +441,29 @@ func (d *Decoder) decodeFloat32(path string, number interface{}, fn hybrids.Fiel
     return
 }
 
-func (d *Decoder) decodeVectorInt8(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.VectorInt8WriterAccessor) (err error) {
-    var vector hybrids.VectorInt8Writer
+func (d *Decoder) decodeVectorInt8(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorInt8Writer) (err error) {
     var item int8
     var vi []interface{}
     var ok bool
 
-	if value!=nil{
-        vi, ok = value.([]interface{})
-
-        if !ok{
-            err = &DecodeError{
-                Path:        path,
-                Application: d.application,
-                HybridType:  hybrids.VectorInt8,
-                OmniqlType:  "Vector[Int8]",
-                ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
-        }
-        return
-       }
+    if value == nil {
+		//Don't return an error remember that vector  can be null in a table
+		return
 	}
 
-    vector, err = tw.SetVectorInt8(fn)
+	vi, ok = value.([]interface{})
 
-    if err != nil {
-       err = &DecodeError{
-           Path:        path,
-           Application: d.application,
-           HybridType:  hybrids.VectorInt8,
-           OmniqlType:  "Vector[Int8]",
-           ErrorMsg:    err.Error(),
-       }
-       return
+	if !ok{
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			HybridType:  hybrids.VectorInt8,
+			OmniqlType:  "Vector[Int8]",
+			ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
+        }
+     return
     }
-    if value==nil{
-       return
-    }
+
 
     for index, v := range vi {
         item, err = d.getInt8(v)
@@ -490,7 +477,7 @@ func (d *Decoder) decodeVectorInt8(path string, value interface{}, fn hybrids.Fi
             }
             return
         }
-        err = vector.PushInt8(item)
+        err = vw.PushInt8(item)
         if err!=nil{
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
@@ -505,42 +492,29 @@ func (d *Decoder) decodeVectorInt8(path string, value interface{}, fn hybrids.Fi
     return
 }
 
-func (d *Decoder) decodeVectorUint8(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.VectorUint8WriterAccessor) (err error) {
-    var vector hybrids.VectorUint8Writer
+func (d *Decoder) decodeVectorUint8(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorUint8Writer) (err error) {
     var item uint8
     var vi []interface{}
     var ok bool
 
-	if value!=nil{
-        vi, ok = value.([]interface{})
-
-        if !ok{
-            err = &DecodeError{
-                Path:        path,
-                Application: d.application,
-                HybridType:  hybrids.VectorUint8,
-                OmniqlType:  "Vector[Uint8]",
-                ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
-        }
-        return
-       }
+    if value == nil {
+		//Don't return an error remember that vector  can be null in a table
+		return
 	}
 
-    vector, err = tw.SetVectorUint8(fn)
+	vi, ok = value.([]interface{})
 
-    if err != nil {
-       err = &DecodeError{
-           Path:        path,
-           Application: d.application,
-           HybridType:  hybrids.VectorUint8,
-           OmniqlType:  "Vector[Uint8]",
-           ErrorMsg:    err.Error(),
-       }
-       return
+	if !ok{
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			HybridType:  hybrids.VectorUint8,
+			OmniqlType:  "Vector[Uint8]",
+			ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
+        }
+     return
     }
-    if value==nil{
-       return
-    }
+
 
     for index, v := range vi {
         item, err = d.getUint8(v)
@@ -554,7 +528,7 @@ func (d *Decoder) decodeVectorUint8(path string, value interface{}, fn hybrids.F
             }
             return
         }
-        err = vector.PushUint8(item)
+        err = vw.PushUint8(item)
         if err!=nil{
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
@@ -569,42 +543,29 @@ func (d *Decoder) decodeVectorUint8(path string, value interface{}, fn hybrids.F
     return
 }
 
-func (d *Decoder) decodeVectorInt16(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.VectorInt16WriterAccessor) (err error) {
-    var vector hybrids.VectorInt16Writer
+func (d *Decoder) decodeVectorInt16(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorInt16Writer) (err error) {
     var item int16
     var vi []interface{}
     var ok bool
 
-	if value!=nil{
-        vi, ok = value.([]interface{})
-
-        if !ok{
-            err = &DecodeError{
-                Path:        path,
-                Application: d.application,
-                HybridType:  hybrids.VectorInt16,
-                OmniqlType:  "Vector[Int16]",
-                ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
-        }
-        return
-       }
+    if value == nil {
+		//Don't return an error remember that vector  can be null in a table
+		return
 	}
 
-    vector, err = tw.SetVectorInt16(fn)
+	vi, ok = value.([]interface{})
 
-    if err != nil {
-       err = &DecodeError{
-           Path:        path,
-           Application: d.application,
-           HybridType:  hybrids.VectorInt16,
-           OmniqlType:  "Vector[Int16]",
-           ErrorMsg:    err.Error(),
-       }
-       return
+	if !ok{
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			HybridType:  hybrids.VectorInt16,
+			OmniqlType:  "Vector[Int16]",
+			ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
+        }
+     return
     }
-    if value==nil{
-       return
-    }
+
 
     for index, v := range vi {
         item, err = d.getInt16(v)
@@ -618,7 +579,7 @@ func (d *Decoder) decodeVectorInt16(path string, value interface{}, fn hybrids.F
             }
             return
         }
-        err = vector.PushInt16(item)
+        err = vw.PushInt16(item)
         if err!=nil{
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
@@ -633,42 +594,29 @@ func (d *Decoder) decodeVectorInt16(path string, value interface{}, fn hybrids.F
     return
 }
 
-func (d *Decoder) decodeVectorUint16(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.VectorUint16WriterAccessor) (err error) {
-    var vector hybrids.VectorUint16Writer
+func (d *Decoder) decodeVectorUint16(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorUint16Writer) (err error) {
     var item uint16
     var vi []interface{}
     var ok bool
 
-	if value!=nil{
-        vi, ok = value.([]interface{})
-
-        if !ok{
-            err = &DecodeError{
-                Path:        path,
-                Application: d.application,
-                HybridType:  hybrids.VectorUint16,
-                OmniqlType:  "Vector[Uint16]",
-                ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
-        }
-        return
-       }
+    if value == nil {
+		//Don't return an error remember that vector  can be null in a table
+		return
 	}
 
-    vector, err = tw.SetVectorUint16(fn)
+	vi, ok = value.([]interface{})
 
-    if err != nil {
-       err = &DecodeError{
-           Path:        path,
-           Application: d.application,
-           HybridType:  hybrids.VectorUint16,
-           OmniqlType:  "Vector[Uint16]",
-           ErrorMsg:    err.Error(),
-       }
-       return
+	if !ok{
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			HybridType:  hybrids.VectorUint16,
+			OmniqlType:  "Vector[Uint16]",
+			ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
+        }
+     return
     }
-    if value==nil{
-       return
-    }
+
 
     for index, v := range vi {
         item, err = d.getUint16(v)
@@ -682,7 +630,7 @@ func (d *Decoder) decodeVectorUint16(path string, value interface{}, fn hybrids.
             }
             return
         }
-        err = vector.PushUint16(item)
+        err = vw.PushUint16(item)
         if err!=nil{
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
@@ -697,42 +645,29 @@ func (d *Decoder) decodeVectorUint16(path string, value interface{}, fn hybrids.
     return
 }
 
-func (d *Decoder) decodeVectorInt32(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.VectorInt32WriterAccessor) (err error) {
-    var vector hybrids.VectorInt32Writer
+func (d *Decoder) decodeVectorInt32(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorInt32Writer) (err error) {
     var item int32
     var vi []interface{}
     var ok bool
 
-	if value!=nil{
-        vi, ok = value.([]interface{})
-
-        if !ok{
-            err = &DecodeError{
-                Path:        path,
-                Application: d.application,
-                HybridType:  hybrids.VectorInt32,
-                OmniqlType:  "Vector[Int32]",
-                ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
-        }
-        return
-       }
+    if value == nil {
+		//Don't return an error remember that vector  can be null in a table
+		return
 	}
 
-    vector, err = tw.SetVectorInt32(fn)
+	vi, ok = value.([]interface{})
 
-    if err != nil {
-       err = &DecodeError{
-           Path:        path,
-           Application: d.application,
-           HybridType:  hybrids.VectorInt32,
-           OmniqlType:  "Vector[Int32]",
-           ErrorMsg:    err.Error(),
-       }
-       return
+	if !ok{
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			HybridType:  hybrids.VectorInt32,
+			OmniqlType:  "Vector[Int32]",
+			ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
+        }
+     return
     }
-    if value==nil{
-       return
-    }
+
 
     for index, v := range vi {
         item, err = d.getInt32(v)
@@ -746,7 +681,7 @@ func (d *Decoder) decodeVectorInt32(path string, value interface{}, fn hybrids.F
             }
             return
         }
-        err = vector.PushInt32(item)
+        err = vw.PushInt32(item)
         if err!=nil{
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
@@ -761,42 +696,29 @@ func (d *Decoder) decodeVectorInt32(path string, value interface{}, fn hybrids.F
     return
 }
 
-func (d *Decoder) decodeVectorUint32(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.VectorUint32WriterAccessor) (err error) {
-    var vector hybrids.VectorUint32Writer
+func (d *Decoder) decodeVectorUint32(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorUint32Writer) (err error) {
     var item uint32
     var vi []interface{}
     var ok bool
 
-	if value!=nil{
-        vi, ok = value.([]interface{})
-
-        if !ok{
-            err = &DecodeError{
-                Path:        path,
-                Application: d.application,
-                HybridType:  hybrids.VectorUint32,
-                OmniqlType:  "Vector[Uint32]",
-                ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
-        }
-        return
-       }
+    if value == nil {
+		//Don't return an error remember that vector  can be null in a table
+		return
 	}
 
-    vector, err = tw.SetVectorUint32(fn)
+	vi, ok = value.([]interface{})
 
-    if err != nil {
-       err = &DecodeError{
-           Path:        path,
-           Application: d.application,
-           HybridType:  hybrids.VectorUint32,
-           OmniqlType:  "Vector[Uint32]",
-           ErrorMsg:    err.Error(),
-       }
-       return
+	if !ok{
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			HybridType:  hybrids.VectorUint32,
+			OmniqlType:  "Vector[Uint32]",
+			ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
+        }
+     return
     }
-    if value==nil{
-       return
-    }
+
 
     for index, v := range vi {
         item, err = d.getUint32(v)
@@ -810,7 +732,7 @@ func (d *Decoder) decodeVectorUint32(path string, value interface{}, fn hybrids.
             }
             return
         }
-        err = vector.PushUint32(item)
+        err = vw.PushUint32(item)
         if err!=nil{
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
@@ -825,42 +747,29 @@ func (d *Decoder) decodeVectorUint32(path string, value interface{}, fn hybrids.
     return
 }
 
-func (d *Decoder) decodeVectorFloat32(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.VectorFloat32WriterAccessor) (err error) {
-    var vector hybrids.VectorFloat32Writer
+func (d *Decoder) decodeVectorFloat32(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorFloat32Writer) (err error) {
     var item float32
     var vi []interface{}
     var ok bool
 
-	if value!=nil{
-        vi, ok = value.([]interface{})
-
-        if !ok{
-            err = &DecodeError{
-                Path:        path,
-                Application: d.application,
-                HybridType:  hybrids.VectorFloat32,
-                OmniqlType:  "Vector[Float32]",
-                ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
-        }
-        return
-       }
+    if value == nil {
+		//Don't return an error remember that vector  can be null in a table
+		return
 	}
 
-    vector, err = tw.SetVectorFloat32(fn)
+	vi, ok = value.([]interface{})
 
-    if err != nil {
-       err = &DecodeError{
-           Path:        path,
-           Application: d.application,
-           HybridType:  hybrids.VectorFloat32,
-           OmniqlType:  "Vector[Float32]",
-           ErrorMsg:    err.Error(),
-       }
-       return
+	if !ok{
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			HybridType:  hybrids.VectorFloat32,
+			OmniqlType:  "Vector[Float32]",
+			ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
+        }
+     return
     }
-    if value==nil{
-       return
-    }
+
 
     for index, v := range vi {
         item, err = d.getFloat32(v)
@@ -874,7 +783,7 @@ func (d *Decoder) decodeVectorFloat32(path string, value interface{}, fn hybrids
             }
             return
         }
-        err = vector.PushFloat32(item)
+        err = vw.PushFloat32(item)
         if err!=nil{
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
@@ -889,42 +798,29 @@ func (d *Decoder) decodeVectorFloat32(path string, value interface{}, fn hybrids
     return
 }
 
-func (d *Decoder) decodeVectorFloat64(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.VectorFloat64WriterAccessor) (err error) {
-    var vector hybrids.VectorFloat64Writer
+func (d *Decoder) decodeVectorFloat64(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorFloat64Writer) (err error) {
     var item float64
     var vi []interface{}
     var ok bool
 
-	if value!=nil{
-        vi, ok = value.([]interface{})
-
-        if !ok{
-            err = &DecodeError{
-                Path:        path,
-                Application: d.application,
-                HybridType:  hybrids.VectorFloat64,
-                OmniqlType:  "Vector[Float64]",
-                ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
-        }
-        return
-       }
+    if value == nil {
+		//Don't return an error remember that vector  can be null in a table
+		return
 	}
 
-    vector, err = tw.SetVectorFloat64(fn)
+	vi, ok = value.([]interface{})
 
-    if err != nil {
-       err = &DecodeError{
-           Path:        path,
-           Application: d.application,
-           HybridType:  hybrids.VectorFloat64,
-           OmniqlType:  "Vector[Float64]",
-           ErrorMsg:    err.Error(),
-       }
-       return
+	if !ok{
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			HybridType:  hybrids.VectorFloat64,
+			OmniqlType:  "Vector[Float64]",
+			ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
+        }
+     return
     }
-    if value==nil{
-       return
-    }
+
 
     for index, v := range vi {
         item, err = d.getFloat64(v)
@@ -938,7 +834,7 @@ func (d *Decoder) decodeVectorFloat64(path string, value interface{}, fn hybrids
             }
             return
         }
-        err = vector.PushFloat64(item)
+        err = vw.PushFloat64(item)
         if err!=nil{
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
@@ -953,42 +849,29 @@ func (d *Decoder) decodeVectorFloat64(path string, value interface{}, fn hybrids
     return
 }
 
-func (d *Decoder) decodeVectorInt64(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.VectorInt64WriterAccessor) (err error) {
-    var vector hybrids.VectorInt64Writer
+func (d *Decoder) decodeVectorInt64(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorInt64Writer) (err error) {
     var item int64
     var vi []interface{}
     var ok bool
 
-	if value!=nil{
-        vi, ok = value.([]interface{})
-
-        if !ok{
-            err = &DecodeError{
-                Path:        path,
-                Application: d.application,
-                HybridType:  hybrids.VectorInt64,
-                OmniqlType:  "Vector[Int64]",
-                ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
-        }
-        return
-       }
+    if value == nil {
+		//Don't return an error remember that vector  can be null in a table
+		return
 	}
 
-    vector, err = tw.SetVectorInt64(fn)
+	vi, ok = value.([]interface{})
 
-    if err != nil {
-       err = &DecodeError{
-           Path:        path,
-           Application: d.application,
-           HybridType:  hybrids.VectorInt64,
-           OmniqlType:  "Vector[Int64]",
-           ErrorMsg:    err.Error(),
-       }
-       return
+	if !ok{
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			HybridType:  hybrids.VectorInt64,
+			OmniqlType:  "Vector[Int64]",
+			ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
+        }
+     return
     }
-    if value==nil{
-       return
-    }
+
 
     for index, v := range vi {
         item, err = d.getInt64(v)
@@ -1002,7 +885,7 @@ func (d *Decoder) decodeVectorInt64(path string, value interface{}, fn hybrids.F
             }
             return
         }
-        err = vector.PushInt64(item)
+        err = vw.PushInt64(item)
         if err!=nil{
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),
@@ -1017,42 +900,29 @@ func (d *Decoder) decodeVectorInt64(path string, value interface{}, fn hybrids.F
     return
 }
 
-func (d *Decoder) decodeVectorUint64(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.VectorUint64WriterAccessor) (err error) {
-    var vector hybrids.VectorUint64Writer
+func (d *Decoder) decodeVectorUint64(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorUint64Writer) (err error) {
     var item uint64
     var vi []interface{}
     var ok bool
 
-	if value!=nil{
-        vi, ok = value.([]interface{})
-
-        if !ok{
-            err = &DecodeError{
-                Path:        path,
-                Application: d.application,
-                HybridType:  hybrids.VectorUint64,
-                OmniqlType:  "Vector[Uint64]",
-                ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
-        }
-        return
-       }
+    if value == nil {
+		//Don't return an error remember that vector  can be null in a table
+		return
 	}
 
-    vector, err = tw.SetVectorUint64(fn)
+	vi, ok = value.([]interface{})
 
-    if err != nil {
-       err = &DecodeError{
-           Path:        path,
-           Application: d.application,
-           HybridType:  hybrids.VectorUint64,
-           OmniqlType:  "Vector[Uint64]",
-           ErrorMsg:    err.Error(),
-       }
-       return
+	if !ok{
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			HybridType:  hybrids.VectorUint64,
+			OmniqlType:  "Vector[Uint64]",
+			ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
+        }
+     return
     }
-    if value==nil{
-       return
-    }
+
 
     for index, v := range vi {
         item, err = d.getUint64(v)
@@ -1066,7 +936,7 @@ func (d *Decoder) decodeVectorUint64(path string, value interface{}, fn hybrids.
             }
             return
         }
-        err = vector.PushUint64(item)
+        err = vw.PushUint64(item)
         if err!=nil{
             err = &DecodeError{
                Path:        fmt.Sprintf("%s[%d]", path, index),

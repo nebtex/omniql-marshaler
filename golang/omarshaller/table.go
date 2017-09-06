@@ -7,21 +7,14 @@ import (
 	"reflect"
 )
 
-func (d *Decoder) decodeStruct(path string, value interface{}, oType *oreflection.OType, sw hybrids.ScalarWriter) (err error) {
+func (d *Decoder) decodeTable(path string, value interface{}, oType *oreflection.OType, tw hybrids.TableWriter) (err error) {
 	var vi map[string]interface{}
 	var ok bool
 	var fw *oreflection.FieldWrapper
 	var fo *oreflection.OType
 
 	if value == nil {
-		//Remember a struct are superset of scalar so it never should have a nil value
-		err = &DecodeError{
-			Path:        path,
-			Application: d.application,
-			OmniqlType:  oType.Id,
-			HybridType:  hybrids.Struct,
-			ErrorMsg:    fmt.Sprintf("I expected a Struct, got nil/null"),
-		}
+		//Don't return an error remember that tables  can be null in a parent table
 		return
 	}
 
@@ -32,8 +25,8 @@ func (d *Decoder) decodeStruct(path string, value interface{}, oType *oreflectio
 			Path:        path,
 			Application: d.application,
 			OmniqlType:  oType.Id,
-			HybridType:  hybrids.Struct,
-			ErrorMsg:    fmt.Sprintf("I expected a struct, got %s", reflect.ValueOf(value).Type().String()),
+			HybridType:  hybrids.Table,
+			ErrorMsg:    fmt.Sprintf("I expected a table, got %s", reflect.ValueOf(value).Type().String()),
 		}
 		return
 	}
@@ -62,10 +55,18 @@ func (d *Decoder) decodeStruct(path string, value interface{}, oType *oreflectio
 			return
 		}
 
-		err = d.decodeScalar(path+"."+field_name, value, fo.HybridType, fw.Position, sw)
-		if err != nil {
-			return
+		if fo.HybridType.IsScalar() {
+			err = d.decodeScalar(path+"."+field_name, value, fo.HybridType, fw.Position, tw)
+			if err != nil {
+				return
+			}
+		} else if fo.HybridType.IsVectorScalar() {
+			err = d.decodeVectorScalar(path+"."+field_name, value, fo.HybridType, fw.Position, tw)
+			if err != nil {
+				return
+			}
 		}
+
 	}
 	return
 }

@@ -43,6 +43,152 @@ func (d *Decoder) decode(path string, data interface{}, fieldType string, items 
 
 }
 
+func (d *Decoder) decodeVectorScalar(path string, value interface{}, fieldType hybrids.Types, fn hybrids.FieldNumber, tw hybrids.TableWriter) (err error) {
+	switch  fieldType {
+	case hybrids.VectorBoolean:
+		sw, err := tw.SetVectorBoolean(fn)
+		if err != nil {
+			err = &DecodeError{
+				Path:        path,
+				Application: d.application,
+				OmniqlType:  "Vector[Boolean]",
+				HybridType:  hybrids.VectorBoolean,
+				ErrorMsg:    err.Error(),
+			}
+		}
+		err = d.decodeVectorBoolean(path, value, fn, sw)
+	case hybrids.VectorInt8:
+		sw, err := tw.SetVectorInt8(fn)
+		if err != nil {
+			err = &DecodeError{
+				Path:        path,
+				Application: d.application,
+				OmniqlType:  "Vector[Int8]",
+				HybridType:  hybrids.VectorInt8,
+				ErrorMsg:    err.Error(),
+			}
+		}
+		err = d.decodeVectorInt8(path, value, fn, sw)
+	case hybrids.VectorUint8:
+		sw, err := tw.SetVectorUint8(fn)
+		if err != nil {
+			err = &DecodeError{
+				Path:        path,
+				Application: d.application,
+				OmniqlType:  "Vector[Uint8]",
+				HybridType:  hybrids.VectorUint8,
+				ErrorMsg:    err.Error(),
+			}
+		}
+		err = d.decodeVectorUint8(path, value, fn, sw)
+	case hybrids.VectorInt16:
+		sw, err := tw.SetVectorInt16(fn)
+		if err != nil {
+			err = &DecodeError{
+				Path:        path,
+				Application: d.application,
+				OmniqlType:  "Vector[Int16]",
+				HybridType:  hybrids.VectorInt16,
+				ErrorMsg:    err.Error(),
+			}
+		}
+		err = d.decodeVectorInt16(path, value, fn, sw)
+	case hybrids.VectorUint16:
+		sw, err := tw.SetVectorUint16(fn)
+		if err != nil {
+			err = &DecodeError{
+				Path:        path,
+				Application: d.application,
+				OmniqlType:  "Vector[Uint16]",
+				HybridType:  hybrids.VectorUint16,
+				ErrorMsg:    err.Error(),
+			}
+		}
+		err = d.decodeVectorUint16(path, value, fn, sw)
+	case hybrids.VectorInt32:
+		sw, err := tw.SetVectorInt32(fn)
+		if err != nil {
+			err = &DecodeError{
+				Path:        path,
+				Application: d.application,
+				OmniqlType:  "Vector[Int32]",
+				HybridType:  hybrids.VectorInt32,
+				ErrorMsg:    err.Error(),
+			}
+		}
+		err = d.decodeVectorInt32(path, value, fn, sw)
+	case hybrids.VectorUint32:
+		sw, err := tw.SetVectorUint32(fn)
+		if err != nil {
+			err = &DecodeError{
+				Path:        path,
+				Application: d.application,
+				OmniqlType:  "Vector[Uint32]",
+				HybridType:  hybrids.VectorUint32,
+				ErrorMsg:    err.Error(),
+			}
+		}
+		err = d.decodeVectorUint32(path, value, fn, sw)
+	case hybrids.VectorInt64:
+		sw, err := tw.SetVectorInt64(fn)
+		if err != nil {
+			err = &DecodeError{
+				Path:        path,
+				Application: d.application,
+				OmniqlType:  "Vector[Int64]",
+				HybridType:  hybrids.VectorInt64,
+				ErrorMsg:    err.Error(),
+			}
+		}
+		err = d.decodeVectorInt64(path, value, fn, sw)
+	case hybrids.VectorUint64:
+		sw, err := tw.SetVectorUint64(fn)
+		if err != nil {
+			err = &DecodeError{
+				Path:        path,
+				Application: d.application,
+				OmniqlType:  "Vector[Uint64]",
+				HybridType:  hybrids.VectorUint64,
+				ErrorMsg:    err.Error(),
+			}
+		}
+		err = d.decodeVectorUint64(path, value, fn, sw)
+	case hybrids.VectorFloat32:
+		sw, err := tw.SetVectorFloat32(fn)
+		if err != nil {
+			err = &DecodeError{
+				Path:        path,
+				Application: d.application,
+				OmniqlType:  "Vector[Float32]",
+				HybridType:  hybrids.VectorFloat32,
+				ErrorMsg:    err.Error(),
+			}
+		}
+		err = d.decodeVectorFloat32(path, value, fn, sw)
+	case hybrids.VectorFloat64:
+		sw, err := tw.SetVectorFloat64(fn)
+		if err != nil {
+			err = &DecodeError{
+				Path:        path,
+				Application: d.application,
+				OmniqlType:  "Vector[Float64]",
+				HybridType:  hybrids.VectorFloat64,
+				ErrorMsg:    err.Error(),
+			}
+		}
+		err = d.decodeVectorFloat64(path, value, fn, sw)
+	default:
+		err = &DecodeError{
+			Path:        path,
+			Application: d.application,
+			OmniqlType:  "VectorScalar",
+			ErrorMsg:    fmt.Sprintf("%s not recognized as VectorScalar, this error should not happend :(", fieldType),
+		}
+	}
+
+	return
+}
+
 func (d *Decoder) decodeScalar(path string, value interface{}, fieldType hybrids.Types, fn hybrids.FieldNumber, sw hybrids.ScalarWriter) (err error) {
 	switch  fieldType {
 	case hybrids.Boolean:
@@ -322,43 +468,28 @@ func (d *Decoder) decodeBoolean(path string, number interface{}, fn hybrids.Fiel
 	return
 }
 
-func (d *Decoder) decodeVectorBoolean(path string, value interface{}, fn hybrids.FieldNumber, tw hybrids.VectorBooleanWriterAccessor) (err error) {
-	var vector hybrids.VectorBooleanWriter
+func (d *Decoder) decodeVectorBoolean(path string, value interface{}, fn hybrids.FieldNumber, vw hybrids.VectorBooleanWriter) (err error) {
 	var item bool
 	var vi []interface{}
 	var ok bool
-
-	if value != nil {
-		vi, ok = value.([]interface{})
-
-		if !ok {
-			err = &DecodeError{
-				Path:        path,
-				Application: d.application,
-				HybridType:  hybrids.VectorBoolean,
-				OmniqlType:  "Vector[Boolean]",
-				ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
-			}
-			return
-		}
+	if value == nil {
+		//Don't return an error remember that vector  can be null in a table
+		return
 	}
 
-	vector, err = tw.SetVectorBoolean(fn)
+	vi, ok = value.([]interface{})
 
-	if err != nil {
+	if !ok {
 		err = &DecodeError{
 			Path:        path,
 			Application: d.application,
 			HybridType:  hybrids.VectorBoolean,
 			OmniqlType:  "Vector[Boolean]",
-			ErrorMsg:    err.Error(),
+			ErrorMsg:    fmt.Sprintf("vector [] expected, got %s", reflect.ValueOf(value).Type().String()),
 		}
 		return
 	}
-	if value == nil {
-		return
-	}
-
+	
 	for index, v := range vi {
 		item, err = d.getBoolean(v)
 		if err != nil {
@@ -371,7 +502,7 @@ func (d *Decoder) decodeVectorBoolean(path string, value interface{}, fn hybrids
 			}
 			return
 		}
-		err = vector.PushBoolean(item)
+		err = vw.PushBoolean(item)
 		if err != nil {
 			err = &DecodeError{
 				Path:        fmt.Sprintf("%s[%d]", path, index),

@@ -7,6 +7,7 @@ import (
 	"reflect"
 )
 
+//go:generate go run struct-table-test-generator.go
 func (d *Decoder) decodeStruct(path string, value interface{}, oType *oreflection.OType, sw hybrids.ScalarWriter) (err error) {
 	var vi map[string]interface{}
 	var ok bool

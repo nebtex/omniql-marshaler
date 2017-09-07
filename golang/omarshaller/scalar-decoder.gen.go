@@ -13,7 +13,7 @@ func (d *Decoder) getInt8(number interface{})(value int8, err error){
     var ok bool
 
 	if number==nil{
-	    err = fmt.Errorf("Number expected (float64 or int8), got nil/null")
+	    err = fmt.Errorf("number expected (float64 or int8), got nil/null")
 		return
 	}
 
@@ -25,12 +25,12 @@ func (d *Decoder) getInt8(number interface{})(value int8, err error){
     fv, ok = number.(float64)
 
     if !ok{
-        err = fmt.Errorf("Number expected (float64 or int8), got %s", reflect.ValueOf(number).Type().String())
+        err = fmt.Errorf("number expected (float64 or int8), got %s", reflect.ValueOf(number).Type().String())
         return
     }
 
     if !(hybrids.MinInt8 <= fv && fv <= hybrids.MaxInt8){
-        err = fmt.Errorf("Number is out of bound, got %d", fv)
+        err = fmt.Errorf("number is out of bound, got %d", fv)
 		return
 	}
 
@@ -75,7 +75,7 @@ func (d *Decoder) getUint8(number interface{})(value uint8, err error){
     var ok bool
 
 	if number==nil{
-	    err = fmt.Errorf("Number expected (float64 or uint8), got nil/null")
+	    err = fmt.Errorf("number expected (float64 or uint8), got nil/null")
 		return
 	}
 
@@ -87,12 +87,12 @@ func (d *Decoder) getUint8(number interface{})(value uint8, err error){
     fv, ok = number.(float64)
 
     if !ok{
-        err = fmt.Errorf("Number expected (float64 or uint8), got %s", reflect.ValueOf(number).Type().String())
+        err = fmt.Errorf("number expected (float64 or uint8), got %s", reflect.ValueOf(number).Type().String())
         return
     }
 
     if !(hybrids.MinUint8 <= fv && fv <= hybrids.MaxUint8){
-        err = fmt.Errorf("Number is out of bound, got %d", fv)
+        err = fmt.Errorf("number is out of bound, got %d", fv)
 		return
 	}
 
@@ -137,7 +137,7 @@ func (d *Decoder) getInt16(number interface{})(value int16, err error){
     var ok bool
 
 	if number==nil{
-	    err = fmt.Errorf("Number expected (float64 or int16), got nil/null")
+	    err = fmt.Errorf("number expected (float64 or int16), got nil/null")
 		return
 	}
 
@@ -149,12 +149,12 @@ func (d *Decoder) getInt16(number interface{})(value int16, err error){
     fv, ok = number.(float64)
 
     if !ok{
-        err = fmt.Errorf("Number expected (float64 or int16), got %s", reflect.ValueOf(number).Type().String())
+        err = fmt.Errorf("number expected (float64 or int16), got %s", reflect.ValueOf(number).Type().String())
         return
     }
 
     if !(hybrids.MinInt16 <= fv && fv <= hybrids.MaxInt16){
-        err = fmt.Errorf("Number is out of bound, got %d", fv)
+        err = fmt.Errorf("number is out of bound, got %d", fv)
 		return
 	}
 
@@ -199,7 +199,7 @@ func (d *Decoder) getUint16(number interface{})(value uint16, err error){
     var ok bool
 
 	if number==nil{
-	    err = fmt.Errorf("Number expected (float64 or uint16), got nil/null")
+	    err = fmt.Errorf("number expected (float64 or uint16), got nil/null")
 		return
 	}
 
@@ -211,12 +211,12 @@ func (d *Decoder) getUint16(number interface{})(value uint16, err error){
     fv, ok = number.(float64)
 
     if !ok{
-        err = fmt.Errorf("Number expected (float64 or uint16), got %s", reflect.ValueOf(number).Type().String())
+        err = fmt.Errorf("number expected (float64 or uint16), got %s", reflect.ValueOf(number).Type().String())
         return
     }
 
     if !(hybrids.MinUint16 <= fv && fv <= hybrids.MaxUint16){
-        err = fmt.Errorf("Number is out of bound, got %d", fv)
+        err = fmt.Errorf("number is out of bound, got %d", fv)
 		return
 	}
 
@@ -261,7 +261,7 @@ func (d *Decoder) getInt32(number interface{})(value int32, err error){
     var ok bool
 
 	if number==nil{
-	    err = fmt.Errorf("Number expected (float64 or int32), got nil/null")
+	    err = fmt.Errorf("number expected (float64 or int32), got nil/null")
 		return
 	}
 
@@ -273,12 +273,12 @@ func (d *Decoder) getInt32(number interface{})(value int32, err error){
     fv, ok = number.(float64)
 
     if !ok{
-        err = fmt.Errorf("Number expected (float64 or int32), got %s", reflect.ValueOf(number).Type().String())
+        err = fmt.Errorf("number expected (float64 or int32), got %s", reflect.ValueOf(number).Type().String())
         return
     }
 
     if !(hybrids.MinInt32 <= fv && fv <= hybrids.MaxInt32){
-        err = fmt.Errorf("Number is out of bound, got %d", fv)
+        err = fmt.Errorf("number is out of bound, got %d", fv)
 		return
 	}
 
@@ -323,7 +323,7 @@ func (d *Decoder) getUint32(number interface{})(value uint32, err error){
     var ok bool
 
 	if number==nil{
-	    err = fmt.Errorf("Number expected (float64 or uint32), got nil/null")
+	    err = fmt.Errorf("number expected (float64 or uint32), got nil/null")
 		return
 	}
 
@@ -335,12 +335,12 @@ func (d *Decoder) getUint32(number interface{})(value uint32, err error){
     fv, ok = number.(float64)
 
     if !ok{
-        err = fmt.Errorf("Number expected (float64 or uint32), got %s", reflect.ValueOf(number).Type().String())
+        err = fmt.Errorf("number expected (float64 or uint32), got %s", reflect.ValueOf(number).Type().String())
         return
     }
 
     if !(hybrids.MinUint32 <= fv && fv <= hybrids.MaxUint32){
-        err = fmt.Errorf("Number is out of bound, got %d", fv)
+        err = fmt.Errorf("number is out of bound, got %d", fv)
 		return
 	}
 
@@ -385,7 +385,7 @@ func (d *Decoder) getFloat32(number interface{})(value float32, err error){
     var ok bool
 
 	if number==nil{
-	    err = fmt.Errorf("Number expected (float64 or float32), got nil/null")
+	    err = fmt.Errorf("number expected (float64 or float32), got nil/null")
 		return
 	}
 
@@ -397,12 +397,12 @@ func (d *Decoder) getFloat32(number interface{})(value float32, err error){
     fv, ok = number.(float64)
 
     if !ok{
-        err = fmt.Errorf("Number expected (float64 or float32), got %s", reflect.ValueOf(number).Type().String())
+        err = fmt.Errorf("number expected (float64 or float32), got %s", reflect.ValueOf(number).Type().String())
         return
     }
 
     if !(hybrids.MinFloat32 <= fv && fv <= hybrids.MaxFloat32){
-        err = fmt.Errorf("Number is out of bound, got %d", fv)
+        err = fmt.Errorf("number is out of bound, got %d", fv)
 		return
 	}
 

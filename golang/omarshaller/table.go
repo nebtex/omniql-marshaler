@@ -72,7 +72,7 @@ func (d *Decoder) decodeTable(path string, value interface{}, oType *oreflection
 		switch fo.HybridType {
 		case hybrids.Struct:
 			if value == nil {
-				//Remember a struct are superset of scalar so it never should have a nil value
+				//Remember a struct is a superset of scalars, so it should never have a nil value
 				err = &DecodeError{
 					Path:        path,
 					Application: d.application,

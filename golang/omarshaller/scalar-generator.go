@@ -27,7 +27,7 @@ func (d *Decoder) get{{.scalar.String}}(number interface{})(value {{.scalar.Nati
     var ok bool
 
 	if number==nil{
-	    err = fmt.Errorf("Number expected (float64 or {{.scalar.NativeType}}), got nil/null")
+	    err = fmt.Errorf("number expected (float64 or {{.scalar.NativeType}}), got nil/null")
 		return
 	}
 
@@ -39,12 +39,12 @@ func (d *Decoder) get{{.scalar.String}}(number interface{})(value {{.scalar.Nati
     fv, ok = number.(float64)
 
     if !ok{
-        err = fmt.Errorf("Number expected (float64 or {{.scalar.NativeType}}), got %s", reflect.ValueOf(number).Type().String())
+        err = fmt.Errorf("number expected (float64 or {{.scalar.NativeType}}), got %s", reflect.ValueOf(number).Type().String())
         return
     }
 
     if !(hybrids.Min{{.scalar.String}} <= fv && fv <= hybrids.Max{{.scalar.String}}){
-        err = fmt.Errorf("Number is out of bound, got %d", fv)
+        err = fmt.Errorf("number is out of bound, got %d", fv)
 		return
 	}
 

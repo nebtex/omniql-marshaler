@@ -83,6 +83,7 @@ func (d *Decoder) decodeVectorStruct(path string, value interface{}, oType *oref
 
 	for index, item := range vi {
 		scalarWriter, err = tw.PushStruct()
+
 		if err != nil {
 			err = &DecodeError{
 				Path:        path,
@@ -91,7 +92,9 @@ func (d *Decoder) decodeVectorStruct(path string, value interface{}, oType *oref
 				HybridType:  hybrids.VectorStruct,
 				ErrorMsg:    err.Error(),
 			}
+			return
 		}
+
 		err = d.decodeStruct(path+fmt.Sprintf("[%d]", index), item, oType.Items, scalarWriter)
 		if err != nil {
 			return err

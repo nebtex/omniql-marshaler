@@ -49,7 +49,7 @@ func (d *Decoder) decodeTable(path string, value interface{}, oType *oreflection
 				Path:        path,
 				Application: d.application,
 				OmniqlType:  oType.Id,
-				HybridType:  hybrids.Struct,
+				HybridType:  hybrids.Table,
 				ErrorMsg:    err.Error(),
 			}
 			return

@@ -12,7 +12,7 @@ func (d *Decoder) getString(value interface{}) (str string, err error) {
 	var ok bool
 	str, ok = value.(string)
 	if !ok {
-		err = fmt.Errorf("String expected, got %s", reflect.ValueOf(value).Type().String())
+		err = fmt.Errorf("string expected, got %s", reflect.ValueOf(value).Type().String())
 		return
 	}
 	return
@@ -29,7 +29,7 @@ func (d *Decoder) getByte(value interface{}) (b []byte, err error) {
 
 	str, ok = value.(string)
 	if !ok {
-		err = fmt.Errorf("String or []byte expected, got %s", reflect.ValueOf(value).Type().String())
+		err = fmt.Errorf("string or []byte expected, got %s", reflect.ValueOf(value).Type().String())
 		return
 	}
 
